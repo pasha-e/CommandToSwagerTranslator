@@ -1,0 +1,9 @@
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/NightlyMemoryCheck.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/Experimental.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/Continuous.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/Nightly.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/RUN_TESTS.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/CommandToSwagerTranslator.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/PACKAGE.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/ALL_BUILD.dir
+C:/Projects/CommandToSwagerTranslator/build/CMakeFiles/ZERO_CHECK.dir
