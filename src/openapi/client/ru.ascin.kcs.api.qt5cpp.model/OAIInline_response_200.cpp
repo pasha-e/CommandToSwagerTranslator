@@ -34,8 +34,23 @@ OAIInline_response_200::~OAIInline_response_200() {}
 
 void OAIInline_response_200::initializeModel() {
 
-    m_assemblies_isSet = false;
-    m_assemblies_isValid = false;
+    m_access_token_isSet = false;
+    m_access_token_isValid = false;
+
+    m_token_type_isSet = false;
+    m_token_type_isValid = false;
+
+    m_refresh_token_isSet = false;
+    m_refresh_token_isValid = false;
+
+    m_expires_in_isSet = false;
+    m_expires_in_isValid = false;
+
+    m_scope_isSet = false;
+    m_scope_isValid = false;
+
+    m_o_auth2_session_id_isSet = false;
+    m_o_auth2_session_id_isValid = false;
 }
 
 void OAIInline_response_200::fromJson(QString jsonString) {
@@ -47,8 +62,23 @@ void OAIInline_response_200::fromJson(QString jsonString) {
 
 void OAIInline_response_200::fromJsonObject(QJsonObject json) {
 
-    m_assemblies_isValid = ::OpenAPI::fromJsonValue(assemblies, json[QString("assemblies")]);
-    m_assemblies_isSet = !json[QString("assemblies")].isNull() && m_assemblies_isValid;
+    m_access_token_isValid = ::OpenAPI::fromJsonValue(access_token, json[QString("access_token")]);
+    m_access_token_isSet = !json[QString("access_token")].isNull() && m_access_token_isValid;
+
+    m_token_type_isValid = ::OpenAPI::fromJsonValue(token_type, json[QString("token_type")]);
+    m_token_type_isSet = !json[QString("token_type")].isNull() && m_token_type_isValid;
+
+    m_refresh_token_isValid = ::OpenAPI::fromJsonValue(refresh_token, json[QString("refresh_token")]);
+    m_refresh_token_isSet = !json[QString("refresh_token")].isNull() && m_refresh_token_isValid;
+
+    m_expires_in_isValid = ::OpenAPI::fromJsonValue(expires_in, json[QString("expires_in")]);
+    m_expires_in_isSet = !json[QString("expires_in")].isNull() && m_expires_in_isValid;
+
+    m_scope_isValid = ::OpenAPI::fromJsonValue(scope, json[QString("scope")]);
+    m_scope_isSet = !json[QString("scope")].isNull() && m_scope_isValid;
+
+    m_o_auth2_session_id_isValid = ::OpenAPI::fromJsonValue(o_auth2_session_id, json[QString("OAuth2.SESSION_ID")]);
+    m_o_auth2_session_id_isSet = !json[QString("OAuth2.SESSION_ID")].isNull() && m_o_auth2_session_id_isValid;
 }
 
 QString OAIInline_response_200::asJson() const {
@@ -60,32 +90,152 @@ QString OAIInline_response_200::asJson() const {
 
 QJsonObject OAIInline_response_200::asJsonObject() const {
     QJsonObject obj;
-    if (assemblies.size() > 0) {
-        obj.insert(QString("assemblies"), ::OpenAPI::toJsonValue(assemblies));
+    if (m_access_token_isSet) {
+        obj.insert(QString("access_token"), ::OpenAPI::toJsonValue(access_token));
+    }
+    if (m_token_type_isSet) {
+        obj.insert(QString("token_type"), ::OpenAPI::toJsonValue(token_type));
+    }
+    if (m_refresh_token_isSet) {
+        obj.insert(QString("refresh_token"), ::OpenAPI::toJsonValue(refresh_token));
+    }
+    if (m_expires_in_isSet) {
+        obj.insert(QString("expires_in"), ::OpenAPI::toJsonValue(expires_in));
+    }
+    if (m_scope_isSet) {
+        obj.insert(QString("scope"), ::OpenAPI::toJsonValue(scope));
+    }
+    if (m_o_auth2_session_id_isSet) {
+        obj.insert(QString("OAuth2.SESSION_ID"), ::OpenAPI::toJsonValue(o_auth2_session_id));
     }
     return obj;
 }
 
-QList<OAIAssembly> OAIInline_response_200::getAssemblies() const {
-    return assemblies;
+QString OAIInline_response_200::getAccessToken() const {
+    return access_token;
 }
-void OAIInline_response_200::setAssemblies(const QList<OAIAssembly> &assemblies) {
-    this->assemblies = assemblies;
-    this->m_assemblies_isSet = true;
-}
-
-bool OAIInline_response_200::is_assemblies_Set() const{
-    return m_assemblies_isSet;
+void OAIInline_response_200::setAccessToken(const QString &access_token) {
+    this->access_token = access_token;
+    this->m_access_token_isSet = true;
 }
 
-bool OAIInline_response_200::is_assemblies_Valid() const{
-    return m_assemblies_isValid;
+bool OAIInline_response_200::is_access_token_Set() const{
+    return m_access_token_isSet;
+}
+
+bool OAIInline_response_200::is_access_token_Valid() const{
+    return m_access_token_isValid;
+}
+
+QString OAIInline_response_200::getTokenType() const {
+    return token_type;
+}
+void OAIInline_response_200::setTokenType(const QString &token_type) {
+    this->token_type = token_type;
+    this->m_token_type_isSet = true;
+}
+
+bool OAIInline_response_200::is_token_type_Set() const{
+    return m_token_type_isSet;
+}
+
+bool OAIInline_response_200::is_token_type_Valid() const{
+    return m_token_type_isValid;
+}
+
+QString OAIInline_response_200::getRefreshToken() const {
+    return refresh_token;
+}
+void OAIInline_response_200::setRefreshToken(const QString &refresh_token) {
+    this->refresh_token = refresh_token;
+    this->m_refresh_token_isSet = true;
+}
+
+bool OAIInline_response_200::is_refresh_token_Set() const{
+    return m_refresh_token_isSet;
+}
+
+bool OAIInline_response_200::is_refresh_token_Valid() const{
+    return m_refresh_token_isValid;
+}
+
+double OAIInline_response_200::getExpiresIn() const {
+    return expires_in;
+}
+void OAIInline_response_200::setExpiresIn(const double &expires_in) {
+    this->expires_in = expires_in;
+    this->m_expires_in_isSet = true;
+}
+
+bool OAIInline_response_200::is_expires_in_Set() const{
+    return m_expires_in_isSet;
+}
+
+bool OAIInline_response_200::is_expires_in_Valid() const{
+    return m_expires_in_isValid;
+}
+
+QString OAIInline_response_200::getScope() const {
+    return scope;
+}
+void OAIInline_response_200::setScope(const QString &scope) {
+    this->scope = scope;
+    this->m_scope_isSet = true;
+}
+
+bool OAIInline_response_200::is_scope_Set() const{
+    return m_scope_isSet;
+}
+
+bool OAIInline_response_200::is_scope_Valid() const{
+    return m_scope_isValid;
+}
+
+QString OAIInline_response_200::getOAuth2SessionId() const {
+    return o_auth2_session_id;
+}
+void OAIInline_response_200::setOAuth2SessionId(const QString &o_auth2_session_id) {
+    this->o_auth2_session_id = o_auth2_session_id;
+    this->m_o_auth2_session_id_isSet = true;
+}
+
+bool OAIInline_response_200::is_o_auth2_session_id_Set() const{
+    return m_o_auth2_session_id_isSet;
+}
+
+bool OAIInline_response_200::is_o_auth2_session_id_Valid() const{
+    return m_o_auth2_session_id_isValid;
 }
 
 bool OAIInline_response_200::isSet() const {
     bool isObjectUpdated = false;
     do {
-        if (assemblies.size() > 0) {
+        if (m_access_token_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (m_token_type_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (m_refresh_token_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (m_expires_in_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (m_scope_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (m_o_auth2_session_id_isSet) {
             isObjectUpdated = true;
             break;
         }
@@ -95,7 +245,7 @@ bool OAIInline_response_200::isSet() const {
 
 bool OAIInline_response_200::isValid() const {
     // only required properties are required for the object to be considered valid
-    return true;
+    return m_access_token_isValid && m_token_type_isValid && m_refresh_token_isValid && m_expires_in_isValid && m_scope_isValid && m_o_auth2_session_id_isValid && true;
 }
 
 } // namespace OpenAPI

@@ -13,7 +13,7 @@
 /*
  * OAIAssemblyPartSearchCriteria.h
  *
- * Критерии поиска и отбора модели при поиске
+ * Параметры поиска окружения
  */
 
 #ifndef OAIAssemblyPartSearchCriteria_H
@@ -21,7 +21,7 @@
 
 #include <QJsonObject>
 
-#include <QString>
+#include "ru.ascin.kcs.api.qt5cpp.model\OAILimitingBox.h"
 
 #include "OAIEnum.h"
 #include "OAIObject.h"
@@ -39,10 +39,10 @@ public:
     void fromJsonObject(QJsonObject json) override;
     void fromJson(QString jsonString) override;
 
-    QString getId() const;
-    void setId(const QString &id);
-    bool is_id_Set() const;
-    bool is_id_Valid() const;
+    OAILimitingBox getLimitingBox() const;
+    void setLimitingBox(const OAILimitingBox &limiting_box);
+    bool is_limiting_box_Set() const;
+    bool is_limiting_box_Valid() const;
 
     virtual bool isSet() const override;
     virtual bool isValid() const override;
@@ -50,9 +50,9 @@ public:
 private:
     void initializeModel();
 
-    QString id;
-    bool m_id_isSet;
-    bool m_id_isValid;
+    OAILimitingBox limiting_box;
+    bool m_limiting_box_isSet;
+    bool m_limiting_box_isValid;
 };
 
 } // namespace OpenAPI

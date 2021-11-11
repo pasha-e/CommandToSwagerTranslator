@@ -21,8 +21,7 @@
 
 #include <QJsonObject>
 
-#include "ru.ascin.kcs.api.qt5cpp.model\OAIAssembly.h"
-#include <QList>
+#include <QString>
 
 #include "OAIEnum.h"
 #include "OAIObject.h"
@@ -40,10 +39,35 @@ public:
     void fromJsonObject(QJsonObject json) override;
     void fromJson(QString jsonString) override;
 
-    QList<OAIAssembly> getAssemblies() const;
-    void setAssemblies(const QList<OAIAssembly> &assemblies);
-    bool is_assemblies_Set() const;
-    bool is_assemblies_Valid() const;
+    QString getAccessToken() const;
+    void setAccessToken(const QString &access_token);
+    bool is_access_token_Set() const;
+    bool is_access_token_Valid() const;
+
+    QString getTokenType() const;
+    void setTokenType(const QString &token_type);
+    bool is_token_type_Set() const;
+    bool is_token_type_Valid() const;
+
+    QString getRefreshToken() const;
+    void setRefreshToken(const QString &refresh_token);
+    bool is_refresh_token_Set() const;
+    bool is_refresh_token_Valid() const;
+
+    double getExpiresIn() const;
+    void setExpiresIn(const double &expires_in);
+    bool is_expires_in_Set() const;
+    bool is_expires_in_Valid() const;
+
+    QString getScope() const;
+    void setScope(const QString &scope);
+    bool is_scope_Set() const;
+    bool is_scope_Valid() const;
+
+    QString getOAuth2SessionId() const;
+    void setOAuth2SessionId(const QString &o_auth2_session_id);
+    bool is_o_auth2_session_id_Set() const;
+    bool is_o_auth2_session_id_Valid() const;
 
     virtual bool isSet() const override;
     virtual bool isValid() const override;
@@ -51,9 +75,29 @@ public:
 private:
     void initializeModel();
 
-    QList<OAIAssembly> assemblies;
-    bool m_assemblies_isSet;
-    bool m_assemblies_isValid;
+    QString access_token;
+    bool m_access_token_isSet;
+    bool m_access_token_isValid;
+
+    QString token_type;
+    bool m_token_type_isSet;
+    bool m_token_type_isValid;
+
+    QString refresh_token;
+    bool m_refresh_token_isSet;
+    bool m_refresh_token_isValid;
+
+    double expires_in;
+    bool m_expires_in_isSet;
+    bool m_expires_in_isValid;
+
+    QString scope;
+    bool m_scope_isSet;
+    bool m_scope_isValid;
+
+    QString o_auth2_session_id;
+    bool m_o_auth2_session_id_isSet;
+    bool m_o_auth2_session_id_isValid;
 };
 
 } // namespace OpenAPI

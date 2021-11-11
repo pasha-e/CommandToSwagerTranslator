@@ -34,8 +34,8 @@ OAIAssemblyPartSearchCriteria::~OAIAssemblyPartSearchCriteria() {}
 
 void OAIAssemblyPartSearchCriteria::initializeModel() {
 
-    m_id_isSet = false;
-    m_id_isValid = false;
+    m_limiting_box_isSet = false;
+    m_limiting_box_isValid = false;
 }
 
 void OAIAssemblyPartSearchCriteria::fromJson(QString jsonString) {
@@ -47,8 +47,8 @@ void OAIAssemblyPartSearchCriteria::fromJson(QString jsonString) {
 
 void OAIAssemblyPartSearchCriteria::fromJsonObject(QJsonObject json) {
 
-    m_id_isValid = ::OpenAPI::fromJsonValue(id, json[QString("id")]);
-    m_id_isSet = !json[QString("id")].isNull() && m_id_isValid;
+    m_limiting_box_isValid = ::OpenAPI::fromJsonValue(limiting_box, json[QString("limitingBox")]);
+    m_limiting_box_isSet = !json[QString("limitingBox")].isNull() && m_limiting_box_isValid;
 }
 
 QString OAIAssemblyPartSearchCriteria::asJson() const {
@@ -60,32 +60,32 @@ QString OAIAssemblyPartSearchCriteria::asJson() const {
 
 QJsonObject OAIAssemblyPartSearchCriteria::asJsonObject() const {
     QJsonObject obj;
-    if (m_id_isSet) {
-        obj.insert(QString("id"), ::OpenAPI::toJsonValue(id));
+    if (limiting_box.isSet()) {
+        obj.insert(QString("limitingBox"), ::OpenAPI::toJsonValue(limiting_box));
     }
     return obj;
 }
 
-QString OAIAssemblyPartSearchCriteria::getId() const {
-    return id;
+OAILimitingBox OAIAssemblyPartSearchCriteria::getLimitingBox() const {
+    return limiting_box;
 }
-void OAIAssemblyPartSearchCriteria::setId(const QString &id) {
-    this->id = id;
-    this->m_id_isSet = true;
-}
-
-bool OAIAssemblyPartSearchCriteria::is_id_Set() const{
-    return m_id_isSet;
+void OAIAssemblyPartSearchCriteria::setLimitingBox(const OAILimitingBox &limiting_box) {
+    this->limiting_box = limiting_box;
+    this->m_limiting_box_isSet = true;
 }
 
-bool OAIAssemblyPartSearchCriteria::is_id_Valid() const{
-    return m_id_isValid;
+bool OAIAssemblyPartSearchCriteria::is_limiting_box_Set() const{
+    return m_limiting_box_isSet;
+}
+
+bool OAIAssemblyPartSearchCriteria::is_limiting_box_Valid() const{
+    return m_limiting_box_isValid;
 }
 
 bool OAIAssemblyPartSearchCriteria::isSet() const {
     bool isObjectUpdated = false;
     do {
-        if (m_id_isSet) {
+        if (limiting_box.isSet()) {
             isObjectUpdated = true;
             break;
         }

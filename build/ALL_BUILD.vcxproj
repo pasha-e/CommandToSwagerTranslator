@@ -170,9 +170,17 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Projects\CommandToSwagerTranslator\build\CommandToSwagerTranslator.vcxproj">
-      <Project>{B88ED945-8B60-3245-9974-5D8B177F3887}</Project>
-      <Name>CommandToSwagerTranslator</Name>
+    <ProjectReference Include="C:\Projects\CommandToSwagerTranslator\build\src\app\ConsoleApp.vcxproj">
+      <Project>{5B9EAE13-1387-38A6-9371-DD9084B7F027}</Project>
+      <Name>ConsoleApp</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Projects\CommandToSwagerTranslator\build\src\openapi\client\openapi_client.vcxproj">
+      <Project>{A2582A5D-0767-3F78-83E7-2E57BD6579F6}</Project>
+      <Name>openapi_client</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Projects\CommandToSwagerTranslator\build\src\tcp_server\tcp_server.vcxproj">
+      <Project>{392093C8-B4CD-3629-90AF-BD2B72453C03}</Project>
+      <Name>tcp_server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

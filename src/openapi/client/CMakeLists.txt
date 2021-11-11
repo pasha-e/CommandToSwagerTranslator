@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(client)
+#project(openapi_client)
+set(TARGET_NAME openapi_client)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -14,32 +15,36 @@ endif ()
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Network REQUIRED)
 
-add_library(${PROJECT_NAME}
-    OAIAssembly.cpp
-    OAIAssemblyPart.cpp
-    OAIAssemblyPartSearchCriteria.cpp
-    OAICoordinate.cpp
-    OAIErrorResponse.cpp
-    OAIGuid.cpp
-    OAIInline_object.cpp
-    OAIInline_response_200.cpp
-    OAIInline_response_200_1.cpp
-    OAIInline_response_200_2.cpp
-    OAIInline_response_201.cpp
-    OAILimitingBox.cpp
-    OAIDefaultApi.cpp
-    OAIHelpers.cpp
-    OAIHttpRequest.cpp
-    OAIHttpFileElement.cpp
-)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Network )
+file(GLOB_RECURSE src ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+
+add_library(${TARGET_NAME} ${src})
+#add_library(${PROJECT_NAME}
+#   OAIAssembly.cpp
+#   OAIAssemblyPart.cpp
+#   OAIAssemblyPartSearchCriteria.cpp
+#   OAIBasic_error.cpp
+#   OAICoordinate.cpp
+#   OAIGuid.cpp
+#   OAIInline_object.cpp
+#   OAIInline_response_200.cpp
+#   OAILimitingBox.cpp
+#   OAIWorkspace.cpp
+#   OAIAssemblyApi.cpp
+#   OAIAssemblyPartApi.cpp
+#   OAIDefaultApi.cpp
+#   OAIWorkspaceApi.cpp
+#   OAIHelpers.cpp
+#   OAIHttpRequest.cpp
+#   OAIHttpFileElement.cpp
+#)
+target_link_libraries(${TARGET_NAME} PRIVATE Qt5::Core Qt5::Network )
 
 if(NOT APPLE)
-  target_link_libraries(${PROJECT_NAME} PRIVATE ssl crypto)
+  target_link_libraries(${TARGET_NAME} PRIVATE ssl crypto)
 endif()
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD 14)
+set_property(TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ${TARGET_NAME} PROPERTY CXX_EXTENSIONS OFF)
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+install(TARGETS ${TARGET_NAME} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

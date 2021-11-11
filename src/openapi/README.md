@@ -61,14 +61,13 @@ example.h:
 ```c++
 
 #include <iostream>
-#include "../client/OAIDefaultApi.h"
+#include "../client/OAIAssemblyApi.h"
 
 using namespace test_namespace;
 
 class Example : public QObject {
     Q_OBJECT
     QString create();
-    OAIAssemblyPartSearchCriteria create();
 public slots:
    void exampleFunction1();
 };
@@ -78,43 +77,30 @@ example.cpp:
 
 ```c++
 
-#include "../client/OAIDefaultApi.h"
+#include "../client/OAIAssemblyApi.h"
 #include "example.h"
 #include <QTimer>
 #include <QEventLoop> 
 
 QString Example::create(){
     QString obj;
-OAIAssemblyPartSearchCriteria Example::create(){
-    OAIAssemblyPartSearchCriteria obj;
  return obj;
 }
 
 void Example::exampleFunction1(){
-     OAIDefaultApi apiInstance;
+     OAIAssemblyApi apiInstance;
              
       QEventLoop loop;
-      connect(&apiInstance, &OAIDefaultApi::assemblyPart_getByCriteriaSignal, [&]() {
+      connect(&apiInstance, &OAIAssemblyApi::assembly_getByGuidSignal, [&]() {
           loop.quit();
       });
-      connect(&apiInstance, &OAIDefaultApi::assemblyPart_getByCriteriaSignalE, [&](QNetworkReply::NetworkError, QString error_str) {
+      connect(&apiInstance, &OAIAssemblyApi::assembly_getByGuidSignalE, [&](QNetworkReply::NetworkError, QString error_str) {
           qDebug() << "Error happened while issuing request : " << error_str;
           loop.quit();
       });
 
-      QString project_id = create(); // QString | 
-        
-      QEventLoop loop;
-      connect(&apiInstance, &OAIDefaultApi::assemblyPart_getByCriteriaSignal, [&]() {
-          loop.quit();
-      });
-      connect(&apiInstance, &OAIDefaultApi::assemblyPart_getByCriteriaSignalE, [&](QNetworkReply::NetworkError, QString error_str) {
-          qDebug() << "Error happened while issuing request : " << error_str;
-          loop.quit();
-      });
-
-      OAIAssemblyPartSearchCriteria oai_assembly_part_search_criteria = create(); // OAIAssemblyPartSearchCriteria | 
-      apiInstance.assemblyPart_getByCriteria(project_idoai_assembly_part_search_criteria);
+      QString guid = create(); // QString | 
+      apiInstance.assembly_getByGuid(guid);
       QTimer::singleShot(5000, &loop, &QEventLoop::quit);
       loop.exec();
   }
@@ -123,17 +109,18 @@ void Example::exampleFunction1(){
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:3000/api/v1*
+All URIs are relative to *http://localhost:3000/api/v1/rest*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*OAIDefaultApi* | [**assemblyPart_getByCriteria**](OAIDefaultApi.md#assemblyPart_getByCriteria) | **POST** /{projectId}/assembly-part/get-by-criteria | Получить assembly part по критериям поиска
-*OAIDefaultApi* | [**assemblyPart_getByGuid**](OAIDefaultApi.md#assemblyPart_getByGuid) | **GET** /{projectId}/assembly-part/{guid} | Получить assembply part по GUID
-*OAIDefaultApi* | [**assembly_save**](OAIDefaultApi.md#assembly_save) | **POST** /{projectId}/assembly/save | Сохранить Assembly
-*OAIDefaultApi* | [**model_getAssemblyByGuid**](OAIDefaultApi.md#model_getAssemblyByGuid) | **GET** /{projectId}/assembly/{guid} | Получить Assembly по GUID
+*OAIAssemblyApi* | [**assembly_getByGuid**](OAIAssemblyApi.md#assembly_getByGuid) | **GET** /entities/assembly/{guid} | Получить Assembly по GUID
+*OAIAssemblyPartApi* | [**assemblyPart_getByCriteria**](OAIAssemblyPartApi.md#assemblyPart_getByCriteria) | **POST** /entities/assembly-part | Получить assembly part по критериям поиска
+*OAIAssemblyPartApi* | [**assemblyPart_getByGuid**](OAIAssemblyPartApi.md#assemblyPart_getByGuid) | **GET** /entities/assembly-part/{guid} | Получить assembly part по GUID
+*OAIDefaultApi* | [**assembly_post**](OAIDefaultApi.md#assembly_post) | **POST** /entities/assembly/{guid} | Сохранить Assembly
 *OAIDefaultApi* | [**postOauthToken**](OAIDefaultApi.md#postOauthToken) | **POST** /oauth/token | Get auth token
-*OAIDefaultApi* | [**workspace_getByGuid**](OAIDefaultApi.md#workspace_getByGuid) | **GET** /{projectId}/workspace/{guid} | Получить workspace по guid
-*OAIDefaultApi* | [**workspace_save**](OAIDefaultApi.md#workspace_save) | **POST** /{projectId}/workspace/save | Save workspace
+*OAIDefaultApi* | [**workspace_getById**](OAIDefaultApi.md#workspace_getById) | **GET** /entities/workspace/{guid} | Получить workspace
+*OAIWorkspaceApi* | [**workspace_getListWorkspace**](OAIWorkspaceApi.md#workspace_getListWorkspace) | **GET** /entities/workspace | Получить список workspace
+*OAIWorkspaceApi* | [**workspace_post**](OAIWorkspaceApi.md#workspace_post) | **POST** /entities/workspace/{guid} | Сохранить workspace
 
 
 ## Documentation for Models
@@ -141,15 +128,13 @@ Class | Method | HTTP request | Description
  - [OAIAssembly](OAIAssembly.md)
  - [OAIAssemblyPart](OAIAssemblyPart.md)
  - [OAIAssemblyPartSearchCriteria](OAIAssemblyPartSearchCriteria.md)
+ - [OAIBasic_error](OAIBasic_error.md)
  - [OAICoordinate](OAICoordinate.md)
- - [OAIErrorResponse](OAIErrorResponse.md)
  - [OAIGuid](OAIGuid.md)
  - [OAIInline_object](OAIInline_object.md)
  - [OAIInline_response_200](OAIInline_response_200.md)
- - [OAIInline_response_200_1](OAIInline_response_200_1.md)
- - [OAIInline_response_200_2](OAIInline_response_200_2.md)
- - [OAIInline_response_201](OAIInline_response_201.md)
  - [OAILimitingBox](OAILimitingBox.md)
+ - [OAIWorkspace](OAIWorkspace.md)
 
 
 ## Documentation for Servers

@@ -262,7 +262,7 @@ CommandToSwagerTranslator_SOURCE_DIR:STATIC=C:/Projects/CommandToSwagerTranslato
 DART_TESTING_TIMEOUT:STRING=1500
 
 //Path to a program.
-GITCOMMAND:FILEPATH=GITCOMMAND-NOTFOUND
+GITCOMMAND:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
 //Path to a program.
 HGCOMMAND:FILEPATH=C:/Program Files/TortoiseHg/hg.exe
@@ -299,6 +299,18 @@ SLURM_SRUN_COMMAND:FILEPATH=SLURM_SRUN_COMMAND-NOTFOUND
 
 //Path to a program.
 SVNCOMMAND:FILEPATH=C:/Program Files/TortoiseSVN/bin/svn.exe
+
+//Value Computed by CMake
+openapi_client_BINARY_DIR:STATIC=C:/Projects/CommandToSwagerTranslator/build/src/openapi/client
+
+//Dependencies for the target
+openapi_client_LIB_DEPENDS:STATIC=general;Qt5::Core;general;Qt5::Network;general;ssl;general;crypto;
+
+//Value Computed by CMake
+openapi_client_SOURCE_DIR:STATIC=C:/Projects/CommandToSwagerTranslator/src/openapi/client
+
+//Dependencies for the target
+tcp_server_LIB_DEPENDS:STATIC=general;Qt5::Core;general;Qt5::Network;
 
 
 ########################
@@ -387,7 +399,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_COMPILER

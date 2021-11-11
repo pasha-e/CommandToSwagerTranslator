@@ -10,14 +10,14 @@
  * Do not edit the class manually.
  */
 
-#include "OAIDefaultApi.h"
+#include "OAIWorkspaceApi.h"
 #include "OAIServerConfiguration.h"
 #include <QJsonArray>
 #include <QJsonDocument>
 
 namespace OpenAPI {
 
-OAIDefaultApi::OAIDefaultApi(const int timeOut)
+OAIWorkspaceApi::OAIWorkspaceApi(const int timeOut)
     : _timeOut(timeOut),
       _manager(nullptr),
       isResponseCompressionEnabled(false),
@@ -25,10 +25,10 @@ OAIDefaultApi::OAIDefaultApi(const int timeOut)
     initializeServerConfigs();
 }
 
-OAIDefaultApi::~OAIDefaultApi() {
+OAIWorkspaceApi::~OAIWorkspaceApi() {
 }
 
-void OAIDefaultApi::initializeServerConfigs(){
+void OAIWorkspaceApi::initializeServerConfigs(){
     //Default server
     QList<OAIServerConfiguration> defaultConf = QList<OAIServerConfiguration>();
     //varying endpoint server
@@ -37,56 +37,54 @@ void OAIDefaultApi::initializeServerConfigs(){
     QUrl("http://localhost:3000/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
-    _serverConfigs.insert("assembly_post", defaultConf);
-    _serverIndices.insert("assembly_post", 0);
-    _serverConfigs.insert("postOauthToken", defaultConf);
-    _serverIndices.insert("postOauthToken", 0);
-    _serverConfigs.insert("workspace_getById", defaultConf);
-    _serverIndices.insert("workspace_getById", 0);
+    _serverConfigs.insert("workspace_getListWorkspace", defaultConf);
+    _serverIndices.insert("workspace_getListWorkspace", 0);
+    _serverConfigs.insert("workspace_post", defaultConf);
+    _serverIndices.insert("workspace_post", 0);
 }
 
 /**
 * returns 0 on success and -1, -2 or -3 on failure.
 * -1 when the variable does not exist and -2 if the value is not defined in the enum and -3 if the operation or server index is not found
 */
-int OAIDefaultApi::setDefaultServerValue(int serverIndex, const QString &operation, const QString &variable, const QString &value){
+int OAIWorkspaceApi::setDefaultServerValue(int serverIndex, const QString &operation, const QString &variable, const QString &value){
     auto it = _serverConfigs.find(operation);
     if(it != _serverConfigs.end() && serverIndex < it.value().size() ){
       return _serverConfigs[operation][serverIndex].setDefaultValue(variable,value);
     }
     return -3;
 }
-void OAIDefaultApi::setServerIndex(const QString &operation, int serverIndex){
+void OAIWorkspaceApi::setServerIndex(const QString &operation, int serverIndex){
     if(_serverIndices.contains(operation) && serverIndex < _serverConfigs.find(operation).value().size() )
         _serverIndices[operation] = serverIndex;
 }
 
-void OAIDefaultApi::setApiKey(const QString &apiKeyName, const QString &apiKey){
+void OAIWorkspaceApi::setApiKey(const QString &apiKeyName, const QString &apiKey){
     _apiKeys.insert(apiKeyName,apiKey);
 }
 
-void OAIDefaultApi::setBearerToken(const QString &token){
+void OAIWorkspaceApi::setBearerToken(const QString &token){
     _bearerToken = token;
 }
 
-void OAIDefaultApi::setUsername(const QString &username) {
+void OAIWorkspaceApi::setUsername(const QString &username) {
     _username = username;
 }
 
-void OAIDefaultApi::setPassword(const QString &password) {
+void OAIWorkspaceApi::setPassword(const QString &password) {
     _password = password;
 }
 
 
-void OAIDefaultApi::setTimeOut(const int timeOut) {
+void OAIWorkspaceApi::setTimeOut(const int timeOut) {
     _timeOut = timeOut;
 }
 
-void OAIDefaultApi::setWorkingDirectory(const QString &path) {
+void OAIWorkspaceApi::setWorkingDirectory(const QString &path) {
     _workingDirectory = path;
 }
 
-void OAIDefaultApi::setNetworkAccessManager(QNetworkAccessManager* manager) {
+void OAIWorkspaceApi::setNetworkAccessManager(QNetworkAccessManager* manager) {
     _manager = manager;
 }
 
@@ -98,7 +96,7 @@ void OAIDefaultApi::setNetworkAccessManager(QNetworkAccessManager* manager) {
     * @param variables A map between a variable name and its value. The value is used for substitution in the server's URL template.
     * returns the index of the new server config on success and -1 if the operation is not found
     */
-int OAIDefaultApi::addServerConfiguration(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
+int OAIWorkspaceApi::addServerConfiguration(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
     if(_serverConfigs.contains(operation)){
         _serverConfigs[operation].append(OAIServerConfiguration(
                     url,
@@ -116,7 +114,7 @@ int OAIDefaultApi::addServerConfiguration(const QString &operation, const QUrl &
     * @param description A String that describes the server
     * @param variables A map between a variable name and its value. The value is used for substitution in the server's URL template.
     */
-void OAIDefaultApi::setNewServerForAllOperations(const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
+void OAIWorkspaceApi::setNewServerForAllOperations(const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
     for(auto e : _serverIndices.keys()){
         setServerIndex(e, addServerConfiguration(e, url, description, variables));
     }
@@ -128,27 +126,27 @@ void OAIDefaultApi::setNewServerForAllOperations(const QUrl &url, const QString 
     * @param description A String that describes the server
     * @param variables A map between a variable name and its value. The value is used for substitution in the server's URL template.
     */
-void OAIDefaultApi::setNewServer(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
+void OAIWorkspaceApi::setNewServer(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
     setServerIndex(operation, addServerConfiguration(operation, url, description, variables));
 }
 
-void OAIDefaultApi::addHeaders(const QString &key, const QString &value) {
+void OAIWorkspaceApi::addHeaders(const QString &key, const QString &value) {
     defaultHeaders.insert(key, value);
 }
 
-void OAIDefaultApi::enableRequestCompression() {
+void OAIWorkspaceApi::enableRequestCompression() {
     isRequestCompressionEnabled = true;
 }
 
-void OAIDefaultApi::enableResponseCompression() {
+void OAIWorkspaceApi::enableResponseCompression() {
     isResponseCompressionEnabled = true;
 }
 
-void OAIDefaultApi::abortRequests(){
+void OAIWorkspaceApi::abortRequests(){
     emit abortRequestsSignal();
 }
 
-QString OAIDefaultApi::getParamStylePrefix(QString style){
+QString OAIWorkspaceApi::getParamStylePrefix(QString style){
     if(style == "matrix"){
         return ";";
     }else if(style == "label"){
@@ -166,7 +164,7 @@ QString OAIDefaultApi::getParamStylePrefix(QString style){
     }
 }
 
-QString OAIDefaultApi::getParamStyleSuffix(QString style){
+QString OAIWorkspaceApi::getParamStyleSuffix(QString style){
     if(style == "matrix"){
         return "=";
     }else if(style == "label"){
@@ -184,7 +182,7 @@ QString OAIDefaultApi::getParamStyleSuffix(QString style){
     }
 }
 
-QString OAIDefaultApi::getParamStyleDelimiter(QString style, QString name, bool isExplode){
+QString OAIWorkspaceApi::getParamStyleDelimiter(QString style, QString name, bool isExplode){
 
     if(style == "matrix"){
         return (isExplode) ? ";" + name + "=" : ",";
@@ -211,142 +209,9 @@ QString OAIDefaultApi::getParamStyleDelimiter(QString style, QString name, bool 
     }
 }
 
-void OAIDefaultApi::assembly_post(const QString &guid) {
-    QString fullPath = QString(_serverConfigs["assembly_post"][_serverIndices.value("assembly_post")].URL()+"/entities/assembly/{guid}");
+void OAIWorkspaceApi::workspace_getListWorkspace(const QString &project_id, const ::OpenAPI::OptionalParam<QString> &fetch_plan, const ::OpenAPI::OptionalParam<QString> &limit, const ::OpenAPI::OptionalParam<QString> &offset, const ::OpenAPI::OptionalParam<QString> &sort) {
+    QString fullPath = QString(_serverConfigs["workspace_getListWorkspace"][_serverIndices.value("workspace_getListWorkspace")].URL()+"/entities/workspace");
     
-    
-    {
-        QString guidPathParam("{");
-        guidPathParam.append("guid").append("}");
-        QString pathPrefix, pathSuffix, pathDelimiter;
-        QString pathStyle = "simple";
-        if(pathStyle == "")
-            pathStyle = "simple";
-        pathPrefix = getParamStylePrefix(pathStyle);
-        pathSuffix = getParamStyleSuffix(pathStyle);
-        pathDelimiter = getParamStyleDelimiter(pathStyle, "guid", false);
-        QString paramString = (pathStyle == "matrix") ? pathPrefix+"guid"+pathSuffix : pathPrefix;
-        fullPath.replace(guidPathParam, paramString+QUrl::toPercentEncoding(::OpenAPI::toStringValue(guid)));
-    }
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDefaultApi::assembly_postCallback);
-    connect(this, &OAIDefaultApi::abortRequestsSignal, worker, &QObject::deleteLater);
-    connect(worker, &QObject::destroyed, [this](){
-        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
-            emit allPendingRequestsCompleted();
-        }
-    });
-
-    worker->execute(&input);
-}
-
-void OAIDefaultApi::assembly_postCallback(OAIHttpRequestWorker *worker) {
-    QString msg;
-    QString error_str = worker->error_str;
-    QNetworkReply::NetworkError error_type = worker->error_type;
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        msg = QString("Success! %1 bytes").arg(worker->response.length());
-    } else {
-        msg = "Error: " + worker->error_str;
-        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
-    }
-    worker->deleteLater();
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        emit assembly_postSignal();
-        emit assembly_postSignalFull(worker);
-    } else {
-        emit assembly_postSignalE(error_type, error_str);
-        emit assembly_postSignalEFull(worker, error_type, error_str);
-    }
-}
-
-void OAIDefaultApi::postOauthToken(const QString &content_type_application_x_www_form_urlencoded, const QString &authorization_basic_clientsecret, const ::OpenAPI::OptionalParam<OAIInline_object> &oai_inline_object) {
-    QString fullPath = QString(_serverConfigs["postOauthToken"][_serverIndices.value("postOauthToken")].URL()+"/oauth/token");
-    
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-    if(oai_inline_object.hasValue()){
-
-        QByteArray output = oai_inline_object.value().asJson().toUtf8();
-        input.request_body.append(output);
-    }
-    
-    {
-        if (!::OpenAPI::toStringValue(content_type_application_x_www_form_urlencoded).isEmpty()) {
-            input.headers.insert("Content-Type: application/x-www-form-urlencoded", ::OpenAPI::toStringValue(content_type_application_x_www_form_urlencoded));
-        }
-        }
-    
-    {
-        if (!::OpenAPI::toStringValue(authorization_basic_clientsecret).isEmpty()) {
-            input.headers.insert("Authorization: Basic client:secret", ::OpenAPI::toStringValue(authorization_basic_clientsecret));
-        }
-        }
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDefaultApi::postOauthTokenCallback);
-    connect(this, &OAIDefaultApi::abortRequestsSignal, worker, &QObject::deleteLater);
-    connect(worker, &QObject::destroyed, [this](){
-        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
-            emit allPendingRequestsCompleted();
-        }
-    });
-
-    worker->execute(&input);
-}
-
-void OAIDefaultApi::postOauthTokenCallback(OAIHttpRequestWorker *worker) {
-    QString msg;
-    QString error_str = worker->error_str;
-    QNetworkReply::NetworkError error_type = worker->error_type;
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        msg = QString("Success! %1 bytes").arg(worker->response.length());
-    } else {
-        msg = "Error: " + worker->error_str;
-        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
-    }
-    OAIInline_response_200 output(QString(worker->response));
-    worker->deleteLater();
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        emit postOauthTokenSignal(output);
-        emit postOauthTokenSignalFull(worker, output);
-    } else {
-        emit postOauthTokenSignalE(output, error_type, error_str);
-        emit postOauthTokenSignalEFull(worker, error_type, error_str);
-    }
-}
-
-void OAIDefaultApi::workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan) {
-    QString fullPath = QString(_serverConfigs["workspace_getById"][_serverIndices.value("workspace_getById")].URL()+"/entities/workspace/{guid}");
-    
-    
-    {
-        QString guidPathParam("{");
-        guidPathParam.append("guid").append("}");
-        QString pathPrefix, pathSuffix, pathDelimiter;
-        QString pathStyle = "simple";
-        if(pathStyle == "")
-            pathStyle = "simple";
-        pathPrefix = getParamStylePrefix(pathStyle);
-        pathSuffix = getParamStyleSuffix(pathStyle);
-        pathDelimiter = getParamStyleDelimiter(pathStyle, "guid", false);
-        QString paramString = (pathStyle == "matrix") ? pathPrefix+"guid"+pathSuffix : pathPrefix;
-        fullPath.replace(guidPathParam, paramString+QUrl::toPercentEncoding(::OpenAPI::toStringValue(guid)));
-    }
     QString queryPrefix, querySuffix, queryDelimiter, queryStyle;
     if(fetch_plan.hasValue())
     {
@@ -363,6 +228,66 @@ void OAIDefaultApi::workspace_getById(const QString &guid, const ::OpenAPI::Opti
 
         fullPath.append(QUrl::toPercentEncoding("fetchPlan")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(fetch_plan.value())));
     }
+    if(limit.hasValue())
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "limit", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("limit")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(limit.value())));
+    }
+    if(offset.hasValue())
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "offset", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("offset")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(offset.value())));
+    }
+    if(sort.hasValue())
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "sort", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("sort")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(sort.value())));
+    }
+    
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "projectId", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("projectId")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(project_id)));
+    }
     OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
     worker->setTimeOut(_timeOut);
     worker->setWorkingDirectory(_workingDirectory);
@@ -371,8 +296,8 @@ void OAIDefaultApi::workspace_getById(const QString &guid, const ::OpenAPI::Opti
 
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDefaultApi::workspace_getByIdCallback);
-    connect(this, &OAIDefaultApi::abortRequestsSignal, worker, &QObject::deleteLater);
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIWorkspaceApi::workspace_getListWorkspaceCallback);
+    connect(this, &OAIWorkspaceApi::abortRequestsSignal, worker, &QObject::deleteLater);
     connect(worker, &QObject::destroyed, [this](){
         if(findChildren<OAIHttpRequestWorker*>().count() == 0){
             emit allPendingRequestsCompleted();
@@ -382,7 +307,7 @@ void OAIDefaultApi::workspace_getById(const QString &guid, const ::OpenAPI::Opti
     worker->execute(&input);
 }
 
-void OAIDefaultApi::workspace_getByIdCallback(OAIHttpRequestWorker *worker) {
+void OAIWorkspaceApi::workspace_getListWorkspaceCallback(OAIHttpRequestWorker *worker) {
     QString msg;
     QString error_str = worker->error_str;
     QNetworkReply::NetworkError error_type = worker->error_type;
@@ -393,15 +318,86 @@ void OAIDefaultApi::workspace_getByIdCallback(OAIHttpRequestWorker *worker) {
         msg = "Error: " + worker->error_str;
         error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
     }
-    OAIWorkspace output(QString(worker->response));
+    QList<OAIWorkspace> output;
+    QString json(worker->response);
+    QByteArray array(json.toStdString().c_str());
+    QJsonDocument doc = QJsonDocument::fromJson(array);
+    QJsonArray jsonArray = doc.array();
+    foreach (QJsonValue obj, jsonArray) {
+        OAIWorkspace val;
+        ::OpenAPI::fromJsonValue(val, obj);
+        output.append(val);
+    }
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
-        emit workspace_getByIdSignal(output);
-        emit workspace_getByIdSignalFull(worker, output);
+        emit workspace_getListWorkspaceSignal(output);
+        emit workspace_getListWorkspaceSignalFull(worker, output);
     } else {
-        emit workspace_getByIdSignalE(output, error_type, error_str);
-        emit workspace_getByIdSignalEFull(worker, error_type, error_str);
+        emit workspace_getListWorkspaceSignalE(output, error_type, error_str);
+        emit workspace_getListWorkspaceSignalEFull(worker, error_type, error_str);
+    }
+}
+
+void OAIWorkspaceApi::workspace_post(const QString &guid, const ::OpenAPI::OptionalParam<OAIWorkspace> &oai_workspace) {
+    QString fullPath = QString(_serverConfigs["workspace_post"][_serverIndices.value("workspace_post")].URL()+"/entities/workspace/{guid}");
+    
+    
+    {
+        QString guidPathParam("{");
+        guidPathParam.append("guid").append("}");
+        QString pathPrefix, pathSuffix, pathDelimiter;
+        QString pathStyle = "simple";
+        if(pathStyle == "")
+            pathStyle = "simple";
+        pathPrefix = getParamStylePrefix(pathStyle);
+        pathSuffix = getParamStyleSuffix(pathStyle);
+        pathDelimiter = getParamStyleDelimiter(pathStyle, "guid", false);
+        QString paramString = (pathStyle == "matrix") ? pathPrefix+"guid"+pathSuffix : pathPrefix;
+        fullPath.replace(guidPathParam, paramString+QUrl::toPercentEncoding(::OpenAPI::toStringValue(guid)));
+    }
+    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
+    worker->setTimeOut(_timeOut);
+    worker->setWorkingDirectory(_workingDirectory);
+    OAIHttpRequestInput input(fullPath, "POST");
+
+    if(oai_workspace.hasValue()){
+
+        QByteArray output = oai_workspace.value().asJson().toUtf8();
+        input.request_body.append(output);
+    }
+    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
+
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIWorkspaceApi::workspace_postCallback);
+    connect(this, &OAIWorkspaceApi::abortRequestsSignal, worker, &QObject::deleteLater);
+    connect(worker, &QObject::destroyed, [this](){
+        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
+            emit allPendingRequestsCompleted();
+        }
+    });
+
+    worker->execute(&input);
+}
+
+void OAIWorkspaceApi::workspace_postCallback(OAIHttpRequestWorker *worker) {
+    QString msg;
+    QString error_str = worker->error_str;
+    QNetworkReply::NetworkError error_type = worker->error_type;
+
+    if (worker->error_type == QNetworkReply::NoError) {
+        msg = QString("Success! %1 bytes").arg(worker->response.length());
+    } else {
+        msg = "Error: " + worker->error_str;
+        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
+    }
+    worker->deleteLater();
+
+    if (worker->error_type == QNetworkReply::NoError) {
+        emit workspace_postSignal();
+        emit workspace_postSignalFull(worker);
+    } else {
+        emit workspace_postSignalE(error_type, error_str);
+        emit workspace_postSignalEFull(worker, error_type, error_str);
     }
 }
 

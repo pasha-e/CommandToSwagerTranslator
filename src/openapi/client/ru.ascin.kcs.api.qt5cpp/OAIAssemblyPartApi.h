@@ -10,18 +10,17 @@
  * Do not edit the class manually.
  */
 
-#ifndef OAI_OAIDefaultApi_H
-#define OAI_OAIDefaultApi_H
+#ifndef OAI_OAIAssemblyPartApi_H
+#define OAI_OAIAssemblyPartApi_H
 
 #include "OAIHelpers.h"
 #include "OAIHttpRequest.h"
 #include "OAIServerConfiguration.h"
 
+#include "ru.ascin.kcs.api.qt5cpp.model\OAIAssemblyPart.h"
+#include "ru.ascin.kcs.api.qt5cpp.model\OAIAssemblyPartSearchCriteria.h"
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIBasic_error.h"
-#include "ru.ascin.kcs.api.qt5cpp.model\OAIInline_object.h"
-#include "ru.ascin.kcs.api.qt5cpp.model\OAIInline_response_200.h"
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIObject.h"
-#include "ru.ascin.kcs.api.qt5cpp.model\OAIWorkspace.h"
 #include <QString>
 
 #include <QObject>
@@ -32,12 +31,12 @@
 
 namespace OpenAPI {
 
-class OAIDefaultApi : public QObject {
+class OAIAssemblyPartApi : public QObject {
     Q_OBJECT
 
 public:
-    OAIDefaultApi(const int timeOut = 0);
-    ~OAIDefaultApi();
+    OAIAssemblyPartApi(const int timeOut = 0);
+    ~OAIAssemblyPartApi();
 
     void initializeServerConfigs();
     int setDefaultServerValue(int serverIndex,const QString &operation, const QString &variable,const QString &val);
@@ -61,22 +60,14 @@ public:
     QString getParamStyleDelimiter(QString style, QString name, bool isExplode);
 
     /**
-    * @param[in]  guid QString [required]
+    * @param[in]  oai_assembly_part_search_criteria OAIAssemblyPartSearchCriteria [optional]
     */
-    void assembly_post(const QString &guid);
-
-    /**
-    * @param[in]  content_type_application_x_www_form_urlencoded QString [required]
-    * @param[in]  authorization_basic_clientsecret QString [required]
-    * @param[in]  oai_inline_object OAIInline_object [optional]
-    */
-    void postOauthToken(const QString &content_type_application_x_www_form_urlencoded, const QString &authorization_basic_clientsecret, const ::OpenAPI::OptionalParam<OAIInline_object> &oai_inline_object = ::OpenAPI::OptionalParam<OAIInline_object>());
+    void assemblyPart_getByCriteria(const ::OpenAPI::OptionalParam<OAIAssemblyPartSearchCriteria> &oai_assembly_part_search_criteria = ::OpenAPI::OptionalParam<OAIAssemblyPartSearchCriteria>());
 
     /**
     * @param[in]  guid QString [required]
-    * @param[in]  fetch_plan QString [optional]
     */
-    void workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan = ::OpenAPI::OptionalParam<QString>());
+    void assemblyPart_getByGuid(const QString &guid);
 
 
 private:
@@ -93,27 +84,22 @@ private:
     bool isResponseCompressionEnabled;
     bool isRequestCompressionEnabled;
 
-    void assembly_postCallback(OAIHttpRequestWorker *worker);
-    void postOauthTokenCallback(OAIHttpRequestWorker *worker);
-    void workspace_getByIdCallback(OAIHttpRequestWorker *worker);
+    void assemblyPart_getByCriteriaCallback(OAIHttpRequestWorker *worker);
+    void assemblyPart_getByGuidCallback(OAIHttpRequestWorker *worker);
 
 signals:
 
-    void assembly_postSignal();
-    void postOauthTokenSignal(OAIInline_response_200 summary);
-    void workspace_getByIdSignal(OAIWorkspace summary);
+    void assemblyPart_getByCriteriaSignal(QList<OAIAssemblyPart> summary);
+    void assemblyPart_getByGuidSignal(OAIAssemblyPart summary);
 
-    void assembly_postSignalFull(OAIHttpRequestWorker *worker);
-    void postOauthTokenSignalFull(OAIHttpRequestWorker *worker, OAIInline_response_200 summary);
-    void workspace_getByIdSignalFull(OAIHttpRequestWorker *worker, OAIWorkspace summary);
+    void assemblyPart_getByCriteriaSignalFull(OAIHttpRequestWorker *worker, QList<OAIAssemblyPart> summary);
+    void assemblyPart_getByGuidSignalFull(OAIHttpRequestWorker *worker, OAIAssemblyPart summary);
 
-    void assembly_postSignalE(QNetworkReply::NetworkError error_type, QString error_str);
-    void postOauthTokenSignalE(OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str);
-    void workspace_getByIdSignalE(OAIWorkspace summary, QNetworkReply::NetworkError error_type, QString error_str);
+    void assemblyPart_getByCriteriaSignalE(QList<OAIAssemblyPart> summary, QNetworkReply::NetworkError error_type, QString error_str);
+    void assemblyPart_getByGuidSignalE(OAIAssemblyPart summary, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void assembly_postSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
-    void postOauthTokenSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
-    void workspace_getByIdSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
+    void assemblyPart_getByCriteriaSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
+    void assemblyPart_getByGuidSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
     void abortRequestsSignal();
     void allPendingRequestsCompleted();
