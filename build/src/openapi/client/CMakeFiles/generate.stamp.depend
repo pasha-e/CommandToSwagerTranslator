@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Projects/CommandToSwagerTranslator/src/openapi/client/CMakeLists.txt
+C:/Qt/5.12.5/msvc2017_64/lib/cmake/Qt5Core/Qt5CoreConfig.cmake
+C:/Qt/5.12.5/msvc2017_64/lib/cmake/Qt5Core/Qt5CoreConfigVersion.cmake
+C:/Qt/5.12.5/msvc2017_64/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake
+C:/Qt/5.12.5/msvc2017_64/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake
