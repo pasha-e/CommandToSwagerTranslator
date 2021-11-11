@@ -1,2 +1,0 @@
-C:\Projects\CommandToSwagerTranslator\lib\Debug\tcp_server.pdb
-C:\Projects\CommandToSwagerTranslator\build\src\tcp_server\tcp_server.dir\Debug\tcp_server.pdb

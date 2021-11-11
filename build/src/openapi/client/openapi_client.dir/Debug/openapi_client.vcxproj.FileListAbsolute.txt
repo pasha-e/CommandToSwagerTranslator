@@ -1,2 +1,0 @@
-C:\Projects\CommandToSwagerTranslator\lib\Debug\openapi_client.pdb
-C:\Projects\CommandToSwagerTranslator\build\src\openapi\client\openapi_client.dir\Debug\openapi_client.pdb
