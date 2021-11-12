@@ -16,3 +16,5 @@ target_link_libraries(${TARGET_NAME}
 		Qt5::Network        
 )
 
+target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+

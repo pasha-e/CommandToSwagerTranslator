@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 #project(openapi_client)
 set(TARGET_NAME openapi_client)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 if (MSVC)
@@ -37,11 +37,15 @@ add_library(${TARGET_NAME} ${src})
 #   OAIHttpRequest.cpp
 #   OAIHttpFileElement.cpp
 #)
+
 target_link_libraries(${TARGET_NAME} PRIVATE Qt5::Core Qt5::Network )
 
-if(NOT APPLE)
-  target_link_libraries(${TARGET_NAME} PRIVATE ssl crypto)
-endif()
+target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+#if(NOT APPLE)
+#  target_link_libraries(${TARGET_NAME} PRIVATE ssl crypto)
+#endif()
 
 set_property(TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)

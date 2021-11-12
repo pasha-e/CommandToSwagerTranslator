@@ -18,7 +18,7 @@
 #include "OAIServerConfiguration.h"
 
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIBasic_error.h"
-#include "ru.ascin.kcs.api.qt5cpp.model\OAIObject.h"
+#include "OAIObject.h"
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIWorkspace.h"
 #include <QString>
 

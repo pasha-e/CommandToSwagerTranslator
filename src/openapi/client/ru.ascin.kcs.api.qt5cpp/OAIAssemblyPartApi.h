@@ -20,7 +20,7 @@
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIAssemblyPart.h"
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIAssemblyPartSearchCriteria.h"
 #include "ru.ascin.kcs.api.qt5cpp.model\OAIBasic_error.h"
-#include "ru.ascin.kcs.api.qt5cpp.model\OAIObject.h"
+#include "OAIObject.h"
 #include <QString>
 
 #include <QObject>
