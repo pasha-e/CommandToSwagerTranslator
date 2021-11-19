@@ -11,6 +11,9 @@
  */
 
 #include "OAIDefaultApi.h"
+
+#include <iostream>
+
 #include "OAIServerConfiguration.h"
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -305,6 +308,24 @@ void OAIDefaultApi::postOauthToken(const QString &content_type_application_x_www
         }
     });
 
+	foreach(QString key, input.headers.keys())
+	{
+        std::cout << key.toStdString() << "  " << input.headers.value(key).toStdString() << std::endl;
+	}
+
+    foreach(QString key, input.vars.keys())
+    {
+        std::cout << key.toStdString() << "  " << input.headers.value(key).toStdString() << std::endl;
+    }
+
+    std::cout << oai_inline_object.value().asJson().toStdString() << std::endl;
+	
+    std::cout << input.http_method.toStdString() << std::endl;
+    std::cout << input.url_str.toStdString() << std::endl;
+
+    std::cout << std::endl;
+	
+	
     worker->execute(&input);
 }
 

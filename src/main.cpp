@@ -64,7 +64,7 @@ void testGetAuthTokenFunction()
 	
 
 	//http://localhost:3000/api/v1/rest
-	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru/"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru/api/v1/"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
 
@@ -73,7 +73,13 @@ void testGetAuthTokenFunction()
     QObject::connect(&apiInstance, &OpenAPI::OAIDefaultApi::postOauthTokenSignalE, OnGetAuthTokenSygnalError);
 
     //apiInstance.postOauthToken("Content-Type: application/x-www-form-urlencoded","Authorization: Basic client:secret");
-    apiInstance.postOauthToken("", "");
+
+    OpenAPI::OptionalParam<OpenAPI::OAIInline_object> inlineObject;
+    inlineObject.m_Value.setUsername("rest_user");
+    inlineObject.m_Value.setPassword("rest_user");
+    inlineObject.m_Value.setGrantType("password");
+	
+    apiInstance.postOauthToken(" ", " ", inlineObject);
 
     QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();
