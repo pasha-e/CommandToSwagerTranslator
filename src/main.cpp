@@ -19,12 +19,13 @@ void OnGetByGuidSygnal(OpenAPI::OAIAssembly summary)
 
 void OnGetAuthTokenSygnal(OpenAPI::OAIInline_response_200 summary)
 {
-    std::cout << "postOauthToken responsed " << summary.asJson().toStdString() << std::endl;
+    std::cout << "postOauthToken responsed  " << summary.asJson().toStdString() << std::endl;
 }
 
 void testGetByGuidFunction1()
 {
     OpenAPI::OAIAssemblyApi apiInstance;
+	
     apiInstance.setTimeOut(10000);
 
     
@@ -49,8 +50,11 @@ void testGetAuthTokenFunction()
 {
     OpenAPI::OAIDefaultApi apiInstance;
     apiInstance.setTimeOut(10000);
+    apiInstance.setUsername("rest_user");
+    apiInstance.setPassword("rest_user");
 
-	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+	//http://localhost:3000/api/v1/rest
+	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru/api/v1/rest/entities/assembly"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
 

@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #find_package(Qt5Network REQUIRED)
 find_package(QT NAMES Qt5 COMPONENTS Core Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network REQUIRED)
-#find_package(OpenSSL REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 find_package(Qt5 REQUIRED COMPONENTS Core Network)
 
@@ -41,15 +41,15 @@ target_link_libraries(${TARGET_NAME}
         client 
         Qt5::Core 
         Qt5::Network
+        OpenSSL::SSL
+        OpenSSL::Crypto
         )
-        #OpenSSL::SSL
-        #OpenSSL::Crypto
+        
 
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_EXTENSIONS OFF)
 
-target_link_libraries(CommandToSwagerTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network )
-#OpenSSL::SSL OpenSSL::Crypto
+target_link_libraries(CommandToSwagerTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network OpenSSL::SSL OpenSSL::Crypto)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
