@@ -22,6 +22,15 @@ void OnGetAuthTokenSygnal(OpenAPI::OAIInline_response_200 summary)
     std::cout << "postOauthToken responsed  " << summary.asJson().toStdString() << std::endl;
 }
 
+
+void OnGetAuthTokenSygnalError(OpenAPI::OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str)
+{
+    std::cout << "postOauthTokenErr responsed:  " << error_type<< "  "<< error_type << std::endl;
+    std::cout << summary.asJson().toStdString() << std::endl;
+	
+}
+
+
 void testGetByGuidFunction1()
 {
     OpenAPI::OAIAssemblyApi apiInstance;
@@ -50,17 +59,21 @@ void testGetAuthTokenFunction()
 {
     OpenAPI::OAIDefaultApi apiInstance;
     apiInstance.setTimeOut(10000);
-    apiInstance.setUsername("rest_user");
-    apiInstance.setPassword("rest_user");
+    //apiInstance.setUsername("client");
+    //apiInstance.setPassword("secret");
+	
 
 	//http://localhost:3000/api/v1/rest
-	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru/api/v1/rest/entities/assembly"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru/"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
 
     QObject::connect(&apiInstance, &OpenAPI::OAIDefaultApi::postOauthTokenSignal, OnGetAuthTokenSygnal);
 
-    apiInstance.postOauthToken("","");
+    QObject::connect(&apiInstance, &OpenAPI::OAIDefaultApi::postOauthTokenSignalE, OnGetAuthTokenSygnalError);
+
+    //apiInstance.postOauthToken("Content-Type: application/x-www-form-urlencoded","Authorization: Basic client:secret");
+    apiInstance.postOauthToken("", "");
 
     QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();
