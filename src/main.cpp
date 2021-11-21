@@ -59,10 +59,7 @@ void testGetByGuidFunction1()
 void testGetAuthTokenFunction()
 {
     OpenAPI::OAIAuthApi apiInstance;
-    apiInstance.setTimeOut(10000);
-    //apiInstance.setUsername("client");
-    //apiInstance.setPassword("secret");
-	
+    apiInstance.setTimeOut(10000);	
 
 	//http://localhost:3000/api/v1/rest
 	apiInstance.setNewServerForAllOperations( QUrl("http://kcs.seabis.ru:8080"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
@@ -73,42 +70,17 @@ void testGetAuthTokenFunction()
 
     QObject::connect(&apiInstance, &OpenAPI::OAIAuthApi::postOauthTokenSignalE, OnGetAuthTokenSignalError);
 
+    
+    //передаем пустые объекты в метод из-за некоректной работы генератора, параметры будут установлены напрямую в headers
     OpenAPI::OptionalParam<QString> authParams;
-    QString authHeader=QString("Authorization: Basic Y2xpZW50OnNlY3JldA==");
-    authParams.value().append(authHeader);
+    OpenAPI::OptionalParam<QString> contentTypeParams ;
 
-    OpenAPI::OptionalParam<QString> contentTypeParams;
-  //  QString contentTypeHeader = QString("Content-Type: application/x-www-form-urlencoded");
-  //  contentTypeParams.value().append(contentTypeHeader);
-
-  //  OpenAPI::OptionalParam<OpenAPI::OAIInline_object> inlineObject;
- //   inlineObject.m_Value.setUsername("rest_user");
- //   inlineObject.m_Value.setPassword("rest_user");
- //   inlineObject.m_Value.setGrantType("password");
-
-    OpenAPI::OptionalParam<QString> grantTypeParams;
-
-    grantTypeParams.value().append("password");
-
-    OpenAPI::OptionalParam<QString> usernameParams;
-
-    usernameParams.m_Value.append("rest_user");
-
-    OpenAPI::OptionalParam<QString> passwordParams;
-    passwordParams.value().append("rest_user");
+    OpenAPI::OptionalParam<QString> grantTypeParams("password");
+    OpenAPI::OptionalParam<QString> usernameParams("rest_user");
+    OpenAPI::OptionalParam<QString> passwordParams("rest_user");
 
     apiInstance.addHeaders("Authorization", "Basic Y2xpZW50OnNlY3JldA==");
-  //  apiInstance.addHeaders("Content-Type", "application/x-www-form-urlencoded");
-    apiInstance.setUsername("rest_user");
-    apiInstance.setPassword("rest_user");
-
-    QJsonObject obj;
-    obj["grant_type"] = "password";
-    obj["username"] = "rest_user";
-    obj["password"] = "rest_user";
-    QJsonDocument doc(obj);
-    QByteArray data = doc.toJson();
-   // apiInstance.setUserData
+    apiInstance.addHeaders("Content-Type", "application/x-www-form-urlencoded");
 	
     apiInstance.postOauthToken(contentTypeParams, authParams, grantTypeParams,usernameParams,passwordParams);
 
