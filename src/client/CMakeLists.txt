@@ -21,12 +21,12 @@ add_library(${PROJECT_NAME}
     OAIBasic_error.cpp
     OAICoordinate.cpp
     OAIGuid.cpp
-    OAIInline_object.cpp
     OAIInline_response_200.cpp
     OAILimitingBox.cpp
     OAIWorkspace.cpp
     OAIAssemblyApi.cpp
     OAIAssemblyPartApi.cpp
+    OAIAuthApi.cpp
     OAIDefaultApi.cpp
     OAIWorkspaceApi.cpp
     OAIHelpers.cpp

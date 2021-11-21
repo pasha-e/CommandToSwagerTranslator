@@ -155,7 +155,7 @@ bool OAIInline_object::isSet() const {
 
 bool OAIInline_object::isValid() const {
     // only required properties are required for the object to be considered valid
-    return true;
+    return m_grant_type_isValid && m_username_isValid && m_password_isValid && true;
 }
 
 } // namespace OpenAPI

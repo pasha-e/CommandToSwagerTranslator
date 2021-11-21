@@ -4,6 +4,7 @@
 #include <../tcp_server/tcp_server.h>
 //#include <../client/OAIAssemblyApi.h>
 #include "client/OAIAssemblyApi.h"
+#include "client/OAIAuthApi.h"
 #include <QtCore>
 
 #include <QTimer>
@@ -12,18 +13,18 @@
 #include "client/OAIDefaultApi.h"
 
 
-void OnGetByGuidSygnal(OpenAPI::OAIAssembly summary)
+void OnGetByGuidSignal(OpenAPI::OAIAssembly summary)
 {
     std::cout << "getByGuidSignal responsed " << summary.asJson().toStdString() << std::endl;
 }
 
-void OnGetAuthTokenSygnal(OpenAPI::OAIInline_response_200 summary)
+void OnGetAuthTokenSignal(OpenAPI::OAIInline_response_200 summary)
 {
     std::cout << "postOauthToken responsed  " << summary.asJson().toStdString() << std::endl;
 }
 
 
-void OnGetAuthTokenSygnalError(OpenAPI::OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str)
+void OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str)
 {
     std::cout << "postOauthTokenErr responsed:  " << error_type<< "  "<< error_type << std::endl;
     std::cout << summary.asJson().toStdString() << std::endl;
@@ -42,7 +43,7 @@ void testGetByGuidFunction1()
 
     QEventLoop loop;
     
-    QObject::connect(&apiInstance, &OpenAPI::OAIAssemblyApi::assembly_getByGuidSignal, OnGetByGuidSygnal);
+    QObject::connect(&apiInstance, &OpenAPI::OAIAssemblyApi::assembly_getByGuidSignal, OnGetByGuidSignal);
 	/*
     QObject::connect(&apiInstance, &OpenAPI::OAIAssemblyApi::assembly_getByGuidSignalE, [&](QNetworkReply::NetworkError, QString error_str) {
         qDebug() << "Error happened while issuing request : " << error_str;
@@ -57,29 +58,59 @@ void testGetByGuidFunction1()
 }
 void testGetAuthTokenFunction()
 {
-    OpenAPI::OAIDefaultApi apiInstance;
+    OpenAPI::OAIAuthApi apiInstance;
     apiInstance.setTimeOut(10000);
     //apiInstance.setUsername("client");
     //apiInstance.setPassword("secret");
 	
 
 	//http://localhost:3000/api/v1/rest
-	apiInstance.setNewServerForAllOperations( QUrl("https://kcs.seabis.ru/api/v1/"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+	apiInstance.setNewServerForAllOperations( QUrl("http://kcs.seabis.ru:8080"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
 
-    QObject::connect(&apiInstance, &OpenAPI::OAIDefaultApi::postOauthTokenSignal, OnGetAuthTokenSygnal);
+    QObject::connect(&apiInstance, &OpenAPI::OAIAuthApi::postOauthTokenSignal, OnGetAuthTokenSignal);
 
-    QObject::connect(&apiInstance, &OpenAPI::OAIDefaultApi::postOauthTokenSignalE, OnGetAuthTokenSygnalError);
+    QObject::connect(&apiInstance, &OpenAPI::OAIAuthApi::postOauthTokenSignalE, OnGetAuthTokenSignalError);
 
-    //apiInstance.postOauthToken("Content-Type: application/x-www-form-urlencoded","Authorization: Basic client:secret");
+    OpenAPI::OptionalParam<QString> authParams;
+    QString authHeader=QString("Authorization: Basic Y2xpZW50OnNlY3JldA==");
+    authParams.value().append(authHeader);
 
-    OpenAPI::OptionalParam<OpenAPI::OAIInline_object> inlineObject;
-    inlineObject.m_Value.setUsername("rest_user");
-    inlineObject.m_Value.setPassword("rest_user");
-    inlineObject.m_Value.setGrantType("password");
+    OpenAPI::OptionalParam<QString> contentTypeParams;
+  //  QString contentTypeHeader = QString("Content-Type: application/x-www-form-urlencoded");
+  //  contentTypeParams.value().append(contentTypeHeader);
+
+  //  OpenAPI::OptionalParam<OpenAPI::OAIInline_object> inlineObject;
+ //   inlineObject.m_Value.setUsername("rest_user");
+ //   inlineObject.m_Value.setPassword("rest_user");
+ //   inlineObject.m_Value.setGrantType("password");
+
+    OpenAPI::OptionalParam<QString> grantTypeParams;
+
+    grantTypeParams.value().append("password");
+
+    OpenAPI::OptionalParam<QString> usernameParams;
+
+    usernameParams.m_Value.append("rest_user");
+
+    OpenAPI::OptionalParam<QString> passwordParams;
+    passwordParams.value().append("rest_user");
+
+    apiInstance.addHeaders("Authorization", "Basic Y2xpZW50OnNlY3JldA==");
+  //  apiInstance.addHeaders("Content-Type", "application/x-www-form-urlencoded");
+    apiInstance.setUsername("rest_user");
+    apiInstance.setPassword("rest_user");
+
+    QJsonObject obj;
+    obj["grant_type"] = "password";
+    obj["username"] = "rest_user";
+    obj["password"] = "rest_user";
+    QJsonDocument doc(obj);
+    QByteArray data = doc.toJson();
+   // apiInstance.setUserData
 	
-    apiInstance.postOauthToken(" ", " ", inlineObject);
+    apiInstance.postOauthToken(contentTypeParams, authParams, grantTypeParams,usernameParams,passwordParams);
 
     QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();
@@ -97,5 +128,3 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
-

@@ -8,13 +8,13 @@ HEADERS += \
     $${PWD}/OAIBasic_error.h \
     $${PWD}/OAICoordinate.h \
     $${PWD}/OAIGuid.h \
-    $${PWD}/OAIInline_object.h \
     $${PWD}/OAIInline_response_200.h \
     $${PWD}/OAILimitingBox.h \
     $${PWD}/OAIWorkspace.h \
 # APIs
     $${PWD}/OAIAssemblyApi.h \
     $${PWD}/OAIAssemblyPartApi.h \
+    $${PWD}/OAIAuthApi.h \
     $${PWD}/OAIDefaultApi.h \
     $${PWD}/OAIWorkspaceApi.h \
 # Others
@@ -34,13 +34,13 @@ SOURCES += \
     $${PWD}/OAIBasic_error.cpp \
     $${PWD}/OAICoordinate.cpp \
     $${PWD}/OAIGuid.cpp \
-    $${PWD}/OAIInline_object.cpp \
     $${PWD}/OAIInline_response_200.cpp \
     $${PWD}/OAILimitingBox.cpp \
     $${PWD}/OAIWorkspace.cpp \
 # APIs
     $${PWD}/OAIAssemblyApi.cpp \
     $${PWD}/OAIAssemblyPartApi.cpp \
+    $${PWD}/OAIAuthApi.cpp \
     $${PWD}/OAIDefaultApi.cpp \
     $${PWD}/OAIWorkspaceApi.cpp \
 # Others

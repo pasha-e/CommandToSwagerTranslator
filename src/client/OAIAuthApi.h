@@ -10,16 +10,14 @@
  * Do not edit the class manually.
  */
 
-#ifndef OAI_OAIDefaultApi_H
-#define OAI_OAIDefaultApi_H
+#ifndef OAI_OAIAuthApi_H
+#define OAI_OAIAuthApi_H
 
 #include "OAIHelpers.h"
 #include "OAIHttpRequest.h"
 #include "OAIServerConfiguration.h"
 
-#include "OAIBasic_error.h"
-#include "OAIObject.h"
-#include "OAIWorkspace.h"
+#include "OAIInline_response_200.h"
 #include <QString>
 
 #include <QObject>
@@ -30,12 +28,12 @@
 
 namespace OpenAPI {
 
-class OAIDefaultApi : public QObject {
+class OAIAuthApi : public QObject {
     Q_OBJECT
 
 public:
-    OAIDefaultApi(const int timeOut = 0);
-    ~OAIDefaultApi();
+    OAIAuthApi(const int timeOut = 0);
+    ~OAIAuthApi();
 
     void initializeServerConfigs();
     int setDefaultServerValue(int serverIndex,const QString &operation, const QString &variable,const QString &val);
@@ -59,15 +57,13 @@ public:
     QString getParamStyleDelimiter(QString style, QString name, bool isExplode);
 
     /**
-    * @param[in]  guid QString [required]
+    * @param[in]  content_type_application_x_www_form_urlencoded QString [optional]
+    * @param[in]  authorization_basic_y2xp_zw50_on_nl_y3_jld_a QString [optional]
+    * @param[in]  grant_type QString [optional]
+    * @param[in]  username QString [optional]
+    * @param[in]  password QString [optional]
     */
-    void assembly_post(const QString &guid);
-
-    /**
-    * @param[in]  guid QString [required]
-    * @param[in]  fetch_plan QString [optional]
-    */
-    void workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan = ::OpenAPI::OptionalParam<QString>());
+    void postOauthToken(const ::OpenAPI::OptionalParam<QString> &content_type_application_x_www_form_urlencoded = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &authorization_basic_y2xp_zw50_on_nl_y3_jld_a = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &grant_type = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &username = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &password = ::OpenAPI::OptionalParam<QString>());
 
 
 private:
@@ -84,22 +80,17 @@ private:
     bool isResponseCompressionEnabled;
     bool isRequestCompressionEnabled;
 
-    void assembly_postCallback(OAIHttpRequestWorker *worker);
-    void workspace_getByIdCallback(OAIHttpRequestWorker *worker);
+    void postOauthTokenCallback(OAIHttpRequestWorker *worker);
 
 signals:
 
-    void assembly_postSignal();
-    void workspace_getByIdSignal(OAIWorkspace summary);
+    void postOauthTokenSignal(OAIInline_response_200 summary);
 
-    void assembly_postSignalFull(OAIHttpRequestWorker *worker);
-    void workspace_getByIdSignalFull(OAIHttpRequestWorker *worker, OAIWorkspace summary);
+    void postOauthTokenSignalFull(OAIHttpRequestWorker *worker, OAIInline_response_200 summary);
 
-    void assembly_postSignalE(QNetworkReply::NetworkError error_type, QString error_str);
-    void workspace_getByIdSignalE(OAIWorkspace summary, QNetworkReply::NetworkError error_type, QString error_str);
+    void postOauthTokenSignalE(OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void assembly_postSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
-    void workspace_getByIdSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
+    void postOauthTokenSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
     void abortRequestsSignal();
     void allPendingRequestsCompleted();

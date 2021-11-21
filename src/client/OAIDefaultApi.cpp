@@ -11,9 +11,6 @@
  */
 
 #include "OAIDefaultApi.h"
-
-#include <iostream>
-
 #include "OAIServerConfiguration.h"
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -38,13 +35,10 @@ void OAIDefaultApi::initializeServerConfigs(){
     QList<OAIServerConfiguration> serverConf = QList<OAIServerConfiguration>();
     defaultConf.append(OAIServerConfiguration(
     QUrl("http://localhost:3000/api/v1/rest"),
-    //QUrl("https://kcs.seabis.ru"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
     _serverConfigs.insert("assembly_post", defaultConf);
     _serverIndices.insert("assembly_post", 0);
-    _serverConfigs.insert("postOauthToken", defaultConf);
-    _serverIndices.insert("postOauthToken", 0);
     _serverConfigs.insert("workspace_getById", defaultConf);
     _serverIndices.insert("workspace_getById", 0);
 }
@@ -270,85 +264,6 @@ void OAIDefaultApi::assembly_postCallback(OAIHttpRequestWorker *worker) {
     } else {
         emit assembly_postSignalE(error_type, error_str);
         emit assembly_postSignalEFull(worker, error_type, error_str);
-    }
-}
-
-void OAIDefaultApi::postOauthToken(const QString &content_type_application_x_www_form_urlencoded, const QString &authorization_basic_clientsecret, const ::OpenAPI::OptionalParam<OAIInline_object> &oai_inline_object) {
-    QString fullPath = QString(_serverConfigs["postOauthToken"][_serverIndices.value("postOauthToken")].URL()+"/oauth/token");
-    
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-    if(oai_inline_object.hasValue()){
-
-        QByteArray output = oai_inline_object.value().asJson().toUtf8();
-        input.request_body.append(output);
-    }
-    
-    {
-        if (!::OpenAPI::toStringValue(content_type_application_x_www_form_urlencoded).isEmpty()) {
-            input.headers.insert("Content-Type: application/x-www-form-urlencoded", ::OpenAPI::toStringValue(content_type_application_x_www_form_urlencoded));
-        }
-        }
-    
-    {
-        if (!::OpenAPI::toStringValue(authorization_basic_clientsecret).isEmpty()) {
-            input.headers.insert("Authorization: Basic client:secret", ::OpenAPI::toStringValue(authorization_basic_clientsecret));
-        }
-        }
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDefaultApi::postOauthTokenCallback);
-    connect(this, &OAIDefaultApi::abortRequestsSignal, worker, &QObject::deleteLater);
-    connect(worker, &QObject::destroyed, [this](){
-        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
-            emit allPendingRequestsCompleted();
-        }
-    });
-
-	foreach(QString key, input.headers.keys())
-	{
-        std::cout << key.toStdString() << "  " << input.headers.value(key).toStdString() << std::endl;
-	}
-
-    foreach(QString key, input.vars.keys())
-    {
-        std::cout << key.toStdString() << "  " << input.headers.value(key).toStdString() << std::endl;
-    }
-
-    std::cout << oai_inline_object.value().asJson().toStdString() << std::endl;
-	
-    std::cout << input.http_method.toStdString() << std::endl;
-    std::cout << input.url_str.toStdString() << std::endl;
-
-    std::cout << std::endl;
-	
-	
-    worker->execute(&input);
-}
-
-void OAIDefaultApi::postOauthTokenCallback(OAIHttpRequestWorker *worker) {
-    QString msg;
-    QString error_str = worker->error_str;
-    QNetworkReply::NetworkError error_type = worker->error_type;
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        msg = QString("Success! %1 bytes").arg(worker->response.length());
-    } else {
-        msg = "Error: " + worker->error_str;
-        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
-    }
-    OAIInline_response_200 output(QString(worker->response));
-    worker->deleteLater();
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        emit postOauthTokenSignal(output);
-        emit postOauthTokenSignalFull(worker, output);
-    } else {
-        emit postOauthTokenSignalE(output, error_type, error_str);
-        emit postOauthTokenSignalEFull(worker, error_type, error_str);
     }
 }
 
