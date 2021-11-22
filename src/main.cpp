@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QEventLoop> 
 
+
 using  OpenAPI::OAIWorkspace;
 
 QString _accessToken;
@@ -36,20 +37,24 @@ int main(int argc, char *argv[])
     	
     std::cout << "app started" << std::endl;
 
+    std::cout << "testGetAuthTokenFunction call" << std::endl;
     testGetAuthTokenFunction();
-    std::cout << "testGetAuthTokenFunction called" << std::endl;
+    
 
+    std::cout << "testGetWorkspaceListFunction call" << std::endl;
     testGetWorkspaceListFunction();
-    std::cout << "testGetWorkspaceListFunction called" << std::endl;
+    
+    
     
     return a.exec();
 }
 
+
 void testGetAuthTokenFunction()
 {
     OpenAPI::OAIAuthApi apiInstance;
+    
     apiInstance.setTimeOut(10000);
-
     apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
@@ -76,7 +81,7 @@ void testGetAuthTokenFunction()
     apiInstance.oauth_postOauthToken(contentTypeParams, authParams, grantTypeParams, usernameParams, passwordParams);
 
     QTimer::singleShot(5000, &loop, &QEventLoop::quit);
-    loop.exec();    
+    loop.exec();        
 }
 
 void testGetWorkspaceListFunction()
@@ -111,7 +116,7 @@ void testGetWorkspaceListFunction()
     apiInstance.workspace_getListWorkspace("projectId", emptyParam, emptyParam, emptyParam, emptyParam);
 
 	QTimer::singleShot(5000, &loop, &QEventLoop::quit);
-    loop.exec();
+    loop.exec();    
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -124,7 +129,7 @@ void OnGetByGuidSignal(OpenAPI::OAIAssembly summary)
 
 void OnGetListWorkspaceSignal(QList<OAIWorkspace> summary)
 {
-    std::cout << "GetListWorkspaceSignal responsed "<< std::endl;
+    std::cout << "GetListWorkspaceSignal responsed "<< std::endl;    
 
     foreach(OAIWorkspace value, summary)
     {
