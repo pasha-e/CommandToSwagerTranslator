@@ -21,6 +21,7 @@
 
 #include <QJsonObject>
 
+#include "OAIRenderingParams.h"
 #include <QString>
 
 #include "OAIEnum.h"
@@ -49,6 +50,31 @@ public:
     bool is_name_Set() const;
     bool is_name_Valid() const;
 
+    OAIRenderingParams getSimpleSurfaceParams() const;
+    void setSimpleSurfaceParams(const OAIRenderingParams &simple_surface_params);
+    bool is_simple_surface_params_Set() const;
+    bool is_simple_surface_params_Valid() const;
+
+    OAIRenderingParams getFullSurfaceParams() const;
+    void setFullSurfaceParams(const OAIRenderingParams &full_surface_params);
+    bool is_full_surface_params_Set() const;
+    bool is_full_surface_params_Valid() const;
+
+    OAIRenderingParams getSimpleCollectionParams() const;
+    void setSimpleCollectionParams(const OAIRenderingParams &simple_collection_params);
+    bool is_simple_collection_params_Set() const;
+    bool is_simple_collection_params_Valid() const;
+
+    OAIRenderingParams getFullCollectionParams() const;
+    void setFullCollectionParams(const OAIRenderingParams &full_collection_params);
+    bool is_full_collection_params_Set() const;
+    bool is_full_collection_params_Valid() const;
+
+    bool isShow() const;
+    void setShow(const bool &show);
+    bool is_show_Set() const;
+    bool is_show_Valid() const;
+
     virtual bool isSet() const override;
     virtual bool isValid() const override;
 
@@ -62,6 +88,26 @@ private:
     QString name;
     bool m_name_isSet;
     bool m_name_isValid;
+
+    OAIRenderingParams simple_surface_params;
+    bool m_simple_surface_params_isSet;
+    bool m_simple_surface_params_isValid;
+
+    OAIRenderingParams full_surface_params;
+    bool m_full_surface_params_isSet;
+    bool m_full_surface_params_isValid;
+
+    OAIRenderingParams simple_collection_params;
+    bool m_simple_collection_params_isSet;
+    bool m_simple_collection_params_isValid;
+
+    OAIRenderingParams full_collection_params;
+    bool m_full_collection_params_isSet;
+    bool m_full_collection_params_isValid;
+
+    bool show;
+    bool m_show_isSet;
+    bool m_show_isValid;
 };
 
 } // namespace OpenAPI

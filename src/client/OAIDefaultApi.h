@@ -17,9 +17,6 @@
 #include "OAIHttpRequest.h"
 #include "OAIServerConfiguration.h"
 
-#include "OAIBasic_error.h"
-#include "OAIObject.h"
-#include "OAIWorkspace.h"
 #include <QString>
 
 #include <QObject>
@@ -63,12 +60,6 @@ public:
     */
     void assembly_post(const QString &guid);
 
-    /**
-    * @param[in]  guid QString [required]
-    * @param[in]  fetch_plan QString [optional]
-    */
-    void workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan = ::OpenAPI::OptionalParam<QString>());
-
 
 private:
     QMap<QString,int> _serverIndices;
@@ -85,21 +76,16 @@ private:
     bool isRequestCompressionEnabled;
 
     void assembly_postCallback(OAIHttpRequestWorker *worker);
-    void workspace_getByIdCallback(OAIHttpRequestWorker *worker);
 
 signals:
 
     void assembly_postSignal();
-    void workspace_getByIdSignal(OAIWorkspace summary);
 
     void assembly_postSignalFull(OAIHttpRequestWorker *worker);
-    void workspace_getByIdSignalFull(OAIHttpRequestWorker *worker, OAIWorkspace summary);
 
     void assembly_postSignalE(QNetworkReply::NetworkError error_type, QString error_str);
-    void workspace_getByIdSignalE(OAIWorkspace summary, QNetworkReply::NetworkError error_type, QString error_str);
 
     void assembly_postSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
-    void workspace_getByIdSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
     void abortRequestsSignal();
     void allPendingRequestsCompleted();

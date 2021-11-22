@@ -39,6 +39,21 @@ void OAIWorkspace::initializeModel() {
 
     m_name_isSet = false;
     m_name_isValid = false;
+
+    m_simple_surface_params_isSet = false;
+    m_simple_surface_params_isValid = false;
+
+    m_full_surface_params_isSet = false;
+    m_full_surface_params_isValid = false;
+
+    m_simple_collection_params_isSet = false;
+    m_simple_collection_params_isValid = false;
+
+    m_full_collection_params_isSet = false;
+    m_full_collection_params_isValid = false;
+
+    m_show_isSet = false;
+    m_show_isValid = false;
 }
 
 void OAIWorkspace::fromJson(QString jsonString) {
@@ -55,6 +70,21 @@ void OAIWorkspace::fromJsonObject(QJsonObject json) {
 
     m_name_isValid = ::OpenAPI::fromJsonValue(name, json[QString("name")]);
     m_name_isSet = !json[QString("name")].isNull() && m_name_isValid;
+
+    m_simple_surface_params_isValid = ::OpenAPI::fromJsonValue(simple_surface_params, json[QString("simpleSurfaceParams")]);
+    m_simple_surface_params_isSet = !json[QString("simpleSurfaceParams")].isNull() && m_simple_surface_params_isValid;
+
+    m_full_surface_params_isValid = ::OpenAPI::fromJsonValue(full_surface_params, json[QString("fullSurfaceParams")]);
+    m_full_surface_params_isSet = !json[QString("fullSurfaceParams")].isNull() && m_full_surface_params_isValid;
+
+    m_simple_collection_params_isValid = ::OpenAPI::fromJsonValue(simple_collection_params, json[QString("simpleCollectionParams")]);
+    m_simple_collection_params_isSet = !json[QString("simpleCollectionParams")].isNull() && m_simple_collection_params_isValid;
+
+    m_full_collection_params_isValid = ::OpenAPI::fromJsonValue(full_collection_params, json[QString("fullCollectionParams")]);
+    m_full_collection_params_isSet = !json[QString("fullCollectionParams")].isNull() && m_full_collection_params_isValid;
+
+    m_show_isValid = ::OpenAPI::fromJsonValue(show, json[QString("show")]);
+    m_show_isSet = !json[QString("show")].isNull() && m_show_isValid;
 }
 
 QString OAIWorkspace::asJson() const {
@@ -71,6 +101,21 @@ QJsonObject OAIWorkspace::asJsonObject() const {
     }
     if (m_name_isSet) {
         obj.insert(QString("name"), ::OpenAPI::toJsonValue(name));
+    }
+    if (simple_surface_params.isSet()) {
+        obj.insert(QString("simpleSurfaceParams"), ::OpenAPI::toJsonValue(simple_surface_params));
+    }
+    if (full_surface_params.isSet()) {
+        obj.insert(QString("fullSurfaceParams"), ::OpenAPI::toJsonValue(full_surface_params));
+    }
+    if (simple_collection_params.isSet()) {
+        obj.insert(QString("simpleCollectionParams"), ::OpenAPI::toJsonValue(simple_collection_params));
+    }
+    if (full_collection_params.isSet()) {
+        obj.insert(QString("fullCollectionParams"), ::OpenAPI::toJsonValue(full_collection_params));
+    }
+    if (m_show_isSet) {
+        obj.insert(QString("show"), ::OpenAPI::toJsonValue(show));
     }
     return obj;
 }
@@ -107,6 +152,86 @@ bool OAIWorkspace::is_name_Valid() const{
     return m_name_isValid;
 }
 
+OAIRenderingParams OAIWorkspace::getSimpleSurfaceParams() const {
+    return simple_surface_params;
+}
+void OAIWorkspace::setSimpleSurfaceParams(const OAIRenderingParams &simple_surface_params) {
+    this->simple_surface_params = simple_surface_params;
+    this->m_simple_surface_params_isSet = true;
+}
+
+bool OAIWorkspace::is_simple_surface_params_Set() const{
+    return m_simple_surface_params_isSet;
+}
+
+bool OAIWorkspace::is_simple_surface_params_Valid() const{
+    return m_simple_surface_params_isValid;
+}
+
+OAIRenderingParams OAIWorkspace::getFullSurfaceParams() const {
+    return full_surface_params;
+}
+void OAIWorkspace::setFullSurfaceParams(const OAIRenderingParams &full_surface_params) {
+    this->full_surface_params = full_surface_params;
+    this->m_full_surface_params_isSet = true;
+}
+
+bool OAIWorkspace::is_full_surface_params_Set() const{
+    return m_full_surface_params_isSet;
+}
+
+bool OAIWorkspace::is_full_surface_params_Valid() const{
+    return m_full_surface_params_isValid;
+}
+
+OAIRenderingParams OAIWorkspace::getSimpleCollectionParams() const {
+    return simple_collection_params;
+}
+void OAIWorkspace::setSimpleCollectionParams(const OAIRenderingParams &simple_collection_params) {
+    this->simple_collection_params = simple_collection_params;
+    this->m_simple_collection_params_isSet = true;
+}
+
+bool OAIWorkspace::is_simple_collection_params_Set() const{
+    return m_simple_collection_params_isSet;
+}
+
+bool OAIWorkspace::is_simple_collection_params_Valid() const{
+    return m_simple_collection_params_isValid;
+}
+
+OAIRenderingParams OAIWorkspace::getFullCollectionParams() const {
+    return full_collection_params;
+}
+void OAIWorkspace::setFullCollectionParams(const OAIRenderingParams &full_collection_params) {
+    this->full_collection_params = full_collection_params;
+    this->m_full_collection_params_isSet = true;
+}
+
+bool OAIWorkspace::is_full_collection_params_Set() const{
+    return m_full_collection_params_isSet;
+}
+
+bool OAIWorkspace::is_full_collection_params_Valid() const{
+    return m_full_collection_params_isValid;
+}
+
+bool OAIWorkspace::isShow() const {
+    return show;
+}
+void OAIWorkspace::setShow(const bool &show) {
+    this->show = show;
+    this->m_show_isSet = true;
+}
+
+bool OAIWorkspace::is_show_Set() const{
+    return m_show_isSet;
+}
+
+bool OAIWorkspace::is_show_Valid() const{
+    return m_show_isValid;
+}
+
 bool OAIWorkspace::isSet() const {
     bool isObjectUpdated = false;
     do {
@@ -119,13 +244,38 @@ bool OAIWorkspace::isSet() const {
             isObjectUpdated = true;
             break;
         }
+
+        if (simple_surface_params.isSet()) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (full_surface_params.isSet()) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (simple_collection_params.isSet()) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (full_collection_params.isSet()) {
+            isObjectUpdated = true;
+            break;
+        }
+
+        if (m_show_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
     } while (false);
     return isObjectUpdated;
 }
 
 bool OAIWorkspace::isValid() const {
     // only required properties are required for the object to be considered valid
-    return true;
+    return m_id_isValid && m_name_isValid && m_simple_surface_params_isValid && m_full_surface_params_isValid && m_simple_collection_params_isValid && m_full_collection_params_isValid && true;
 }
 
 } // namespace OpenAPI

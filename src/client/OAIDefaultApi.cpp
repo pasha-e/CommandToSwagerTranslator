@@ -39,8 +39,6 @@ void OAIDefaultApi::initializeServerConfigs(){
     QMap<QString, OAIServerVariable>()));
     _serverConfigs.insert("assembly_post", defaultConf);
     _serverIndices.insert("assembly_post", 0);
-    _serverConfigs.insert("workspace_getById", defaultConf);
-    _serverIndices.insert("workspace_getById", 0);
 }
 
 /**
@@ -264,81 +262,6 @@ void OAIDefaultApi::assembly_postCallback(OAIHttpRequestWorker *worker) {
     } else {
         emit assembly_postSignalE(error_type, error_str);
         emit assembly_postSignalEFull(worker, error_type, error_str);
-    }
-}
-
-void OAIDefaultApi::workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan) {
-    QString fullPath = QString(_serverConfigs["workspace_getById"][_serverIndices.value("workspace_getById")].URL()+"/entities/workspace/{guid}");
-    
-    
-    {
-        QString guidPathParam("{");
-        guidPathParam.append("guid").append("}");
-        QString pathPrefix, pathSuffix, pathDelimiter;
-        QString pathStyle = "simple";
-        if(pathStyle == "")
-            pathStyle = "simple";
-        pathPrefix = getParamStylePrefix(pathStyle);
-        pathSuffix = getParamStyleSuffix(pathStyle);
-        pathDelimiter = getParamStyleDelimiter(pathStyle, "guid", false);
-        QString paramString = (pathStyle == "matrix") ? pathPrefix+"guid"+pathSuffix : pathPrefix;
-        fullPath.replace(guidPathParam, paramString+QUrl::toPercentEncoding(::OpenAPI::toStringValue(guid)));
-    }
-    QString queryPrefix, querySuffix, queryDelimiter, queryStyle;
-    if(fetch_plan.hasValue())
-    {
-        queryStyle = "form";
-        if(queryStyle == "")
-            queryStyle = "form";
-        queryPrefix = getParamStylePrefix(queryStyle);
-        querySuffix = getParamStyleSuffix(queryStyle);
-        queryDelimiter = getParamStyleDelimiter(queryStyle, "fetchPlan", true);
-        if (fullPath.indexOf("?") > 0)
-            fullPath.append(queryPrefix);
-        else
-            fullPath.append("?");
-
-        fullPath.append(QUrl::toPercentEncoding("fetchPlan")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(fetch_plan.value())));
-    }
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "GET");
-
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDefaultApi::workspace_getByIdCallback);
-    connect(this, &OAIDefaultApi::abortRequestsSignal, worker, &QObject::deleteLater);
-    connect(worker, &QObject::destroyed, [this](){
-        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
-            emit allPendingRequestsCompleted();
-        }
-    });
-
-    worker->execute(&input);
-}
-
-void OAIDefaultApi::workspace_getByIdCallback(OAIHttpRequestWorker *worker) {
-    QString msg;
-    QString error_str = worker->error_str;
-    QNetworkReply::NetworkError error_type = worker->error_type;
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        msg = QString("Success! %1 bytes").arg(worker->response.length());
-    } else {
-        msg = "Error: " + worker->error_str;
-        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
-    }
-    OAIWorkspace output(QString(worker->response));
-    worker->deleteLater();
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        emit workspace_getByIdSignal(output);
-        emit workspace_getByIdSignalFull(worker, output);
-    } else {
-        emit workspace_getByIdSignalE(output, error_type, error_str);
-        emit workspace_getByIdSignalEFull(worker, error_type, error_str);
     }
 }
 

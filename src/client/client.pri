@@ -10,6 +10,7 @@ HEADERS += \
     $${PWD}/OAIGuid.h \
     $${PWD}/OAIInline_response_200.h \
     $${PWD}/OAILimitingBox.h \
+    $${PWD}/OAIRenderingParams.h \
     $${PWD}/OAIWorkspace.h \
 # APIs
     $${PWD}/OAIAssemblyApi.h \
@@ -36,6 +37,7 @@ SOURCES += \
     $${PWD}/OAIGuid.cpp \
     $${PWD}/OAIInline_response_200.cpp \
     $${PWD}/OAILimitingBox.cpp \
+    $${PWD}/OAIRenderingParams.cpp \
     $${PWD}/OAIWorkspace.cpp \
 # APIs
     $${PWD}/OAIAssemblyApi.cpp \

@@ -59,6 +59,12 @@ public:
     QString getParamStyleDelimiter(QString style, QString name, bool isExplode);
 
     /**
+    * @param[in]  guid QString [required]
+    * @param[in]  fetch_plan QString [optional]
+    */
+    void workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan = ::OpenAPI::OptionalParam<QString>());
+
+    /**
     * @param[in]  project_id QString [required]
     * @param[in]  fetch_plan QString [optional]
     * @param[in]  limit QString [optional]
@@ -88,20 +94,25 @@ private:
     bool isResponseCompressionEnabled;
     bool isRequestCompressionEnabled;
 
+    void workspace_getByIdCallback(OAIHttpRequestWorker *worker);
     void workspace_getListWorkspaceCallback(OAIHttpRequestWorker *worker);
     void workspace_postCallback(OAIHttpRequestWorker *worker);
 
 signals:
 
+    void workspace_getByIdSignal(OAIWorkspace summary);
     void workspace_getListWorkspaceSignal(QList<OAIWorkspace> summary);
     void workspace_postSignal();
 
+    void workspace_getByIdSignalFull(OAIHttpRequestWorker *worker, OAIWorkspace summary);
     void workspace_getListWorkspaceSignalFull(OAIHttpRequestWorker *worker, QList<OAIWorkspace> summary);
     void workspace_postSignalFull(OAIHttpRequestWorker *worker);
 
+    void workspace_getByIdSignalE(OAIWorkspace summary, QNetworkReply::NetworkError error_type, QString error_str);
     void workspace_getListWorkspaceSignalE(QList<OAIWorkspace> summary, QNetworkReply::NetworkError error_type, QString error_str);
     void workspace_postSignalE(QNetworkReply::NetworkError error_type, QString error_str);
 
+    void workspace_getByIdSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
     void workspace_getListWorkspaceSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
     void workspace_postSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
