@@ -49,7 +49,7 @@ void testGetAuthTokenFunction()
 {
     OpenAPI::OAIAuthApi apiInstance;
     apiInstance.setTimeOut(10000);
-    
+
     apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
@@ -83,10 +83,11 @@ void testGetWorkspaceListFunction()
 {
     OpenAPI::OAIWorkspaceApi apiInstance;
 
-    apiInstance.setTimeOut(10000);   
-    apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setTimeOut(10000);
+    // apiInstance.setNewServerForAllOperations(QUrl("https://kcs.seabis.ru/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
     apiInstance.setBearerToken(_accessToken);
-
+ 
     QEventLoop loop;
 
    
@@ -98,8 +99,9 @@ void testGetWorkspaceListFunction()
 	   
     QObject::connect(&apiInstance, &OpenAPI::OAIWorkspaceApi::workspace_getListWorkspaceSignalE, [&](QList<OAIWorkspace> summary, QNetworkReply::NetworkError error_type, QString error_str)
     {
-            OnGetListWorkspaceSignalError(summary, error_type, error_str);  loop.quit();
+            OnGetListWorkspaceSignalError(summary, error_type, error_str); 
     	
+            loop.quit();
     });
 
 	
@@ -132,7 +134,7 @@ void OnGetListWorkspaceSignal(QList<OAIWorkspace> summary)
 
 void  OnGetListWorkspaceSignalError(QList<OAIWorkspace> summary, QNetworkReply::NetworkError error_type, QString error_str)
 {
-    std::cout << "postOauthTokenErr responsed:  " << error_type << std::endl << error_str.toStdString() << std::endl;
+    std::cout << "OnGetListWorkspaceSignalError responsed:  " << error_type << "  " << error_str.toStdString() << std::endl;
 
     foreach(OAIWorkspace value, summary)
     {

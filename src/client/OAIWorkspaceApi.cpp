@@ -212,6 +212,9 @@ QString OAIWorkspaceApi::getParamStyleDelimiter(QString style, QString name, boo
 void OAIWorkspaceApi::workspace_getListWorkspace(const QString &project_id, const ::OpenAPI::OptionalParam<QString> &fetch_plan, const ::OpenAPI::OptionalParam<QString> &limit, const ::OpenAPI::OptionalParam<QString> &offset, const ::OpenAPI::OptionalParam<QString> &sort) {
     QString fullPath = QString(_serverConfigs["workspace_getListWorkspace"][_serverIndices.value("workspace_getListWorkspace")].URL()+"/entities/workspace");
     
+    if(!_bearerToken.isEmpty())
+        addHeaders("Authorization", "Bearer " + _bearerToken);
+    
     QString queryPrefix, querySuffix, queryDelimiter, queryStyle;
     if(fetch_plan.hasValue())
     {
