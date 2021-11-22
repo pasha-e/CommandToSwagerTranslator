@@ -23,6 +23,7 @@ add_library(${PROJECT_NAME}
     OAIGuid.cpp
     OAIInline_response_200.cpp
     OAILimitingBox.cpp
+    OAIRenderingParams.cpp
     OAIWorkspace.cpp
     OAIAssemblyApi.cpp
     OAIAssemblyPartApi.cpp
