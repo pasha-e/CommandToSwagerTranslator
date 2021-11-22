@@ -23,18 +23,11 @@ file(GLOB_RECURSE SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 include_directories(${SRC})
-
-
-add_executable(CommandToSwagerTranslator "src/main.cpp" "src/client/OAIRenderingParams.cpp" "src/client/OAIAuthApi.cpp" "src/client/OAIAssembly.cpp" "src/client/OAIAssembly.h" "src/client/OAIAssemblyApi.cpp" "src/client/OAIAssemblyApi.h" "src/client/OAIAssemblyPart.cpp" "src/client/OAIAssemblyPart.h" "src/client/OAIAssemblyPartApi.cpp" "src/client/OAIAssemblyPartApi.h" "src/client/OAIAssemblyPartSearchCriteria.cpp" "src/client/OAIAssemblyPartSearchCriteria.h" "src/client/OAIBasic_error.cpp" "src/client/OAIBasic_error.h" "src/client/OAICoordinate.cpp" "src/client/OAICoordinate.h" "src/client/OAIDefaultApi.cpp" "src/client/OAIDefaultApi.h" "src/client/OAIEnum.h" "src/client/OAIGuid.cpp" "src/client/OAIGuid.h" "src/client/OAIHelpers.cpp" "src/client/OAIHelpers.h" "src/client/OAIHttpFileElement.cpp" "src/client/OAIHttpFileElement.h" "src/client/OAIHttpRequest.cpp" "src/client/OAIHttpRequest.h" "src/client/OAIInline_object.cpp" "src/client/OAIInline_object.h" "src/client/OAIInline_response_200.cpp" "src/client/OAIInline_response_200.h" "src/client/OAILimitingBox.cpp" "src/client/OAILimitingBox.h" "src/client/OAIObject.h" "src/client/OAIServerConfiguration.h" "src/client/OAIServerVariable.h" "src/client/OAIWorkspace.cpp" "src/client/OAIWorkspace.h" "src/client/OAIWorkspaceApi.cpp" "src/client/OAIWorkspaceApi.h")
+add_executable(CommandToSwagerTranslator ${SRC})
 
 
 add_subdirectory(src/client)
 add_subdirectory(src/tcp_server)
-
-#target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Network )
-
-
-#add_library(${SRC})
 
 target_link_libraries(${TARGET_NAME} 
         tcp_server 
@@ -45,8 +38,6 @@ target_link_libraries(${TARGET_NAME}
         OpenSSL::Crypto
         )
         
-
-
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_EXTENSIONS OFF)
