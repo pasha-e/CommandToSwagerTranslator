@@ -1,6 +1,6 @@
 /**
  * KCS API
- * KCS API
+ * KOMPAS Collaboration Service API
  *
  * The version of the OpenAPI document: 1.0
  * Contact: modievskii_av@ascon.ru
@@ -37,8 +37,8 @@ void OAIAuthApi::initializeServerConfigs(){
     QUrl("http://localhost:3000/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
-    _serverConfigs.insert("postOauthToken", defaultConf);
-    _serverIndices.insert("postOauthToken", 0);
+    _serverConfigs.insert("oauth_postOauthToken", defaultConf);
+    _serverIndices.insert("oauth_postOauthToken", 0);
 }
 
 /**
@@ -207,42 +207,42 @@ QString OAIAuthApi::getParamStyleDelimiter(QString style, QString name, bool isE
     }
 }
 
-void OAIAuthApi::postOauthToken(const ::OpenAPI::OptionalParam<QString> &content_type_application_x_www_form_urlencoded, const ::OpenAPI::OptionalParam<QString> &authorization_basic_y2xp_zw50_on_nl_y3_jld_a, const ::OpenAPI::OptionalParam<QString> &grant_type, const ::OpenAPI::OptionalParam<QString> &username, const ::OpenAPI::OptionalParam<QString> &password) {
-    QString fullPath = QString(_serverConfigs["postOauthToken"][_serverIndices.value("postOauthToken")].URL()+"/oauth/token");
+void OAIAuthApi::oauth_postOauthToken(const QString &content_type, const QString &authorization, const QString &grant_type, const QString &username, const QString &password) {
+    QString fullPath = QString(_serverConfigs["oauth_postOauthToken"][_serverIndices.value("oauth_postOauthToken")].URL()+"/oauth/token");
     
     OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
     worker->setTimeOut(_timeOut);
     worker->setWorkingDirectory(_workingDirectory);
     OAIHttpRequestInput input(fullPath, "POST");
 
-    if(true)
+    
     {
-        input.add_var("grant_type", ::OpenAPI::toStringValue(grant_type.value()));
+        input.add_var("grant_type", ::OpenAPI::toStringValue(grant_type));
     }
-    if(true)
+    
     {
-        input.add_var("username", ::OpenAPI::toStringValue(username.value()));
+        input.add_var("username", ::OpenAPI::toStringValue(username));
     }
-    if(true)
+    
     {
-        input.add_var("password", ::OpenAPI::toStringValue(password.value()));
+        input.add_var("password", ::OpenAPI::toStringValue(password));
     }
 
-    if(content_type_application_x_www_form_urlencoded.hasValue())
+    
     {
-        if (!::OpenAPI::toStringValue(content_type_application_x_www_form_urlencoded.value()).isEmpty()) {
-            input.headers.insert("Content-Type: application/x-www-form-urlencoded", ::OpenAPI::toStringValue(content_type_application_x_www_form_urlencoded.value()));
+        if (!::OpenAPI::toStringValue(content_type).isEmpty()) {
+            input.headers.insert("Content-Type", ::OpenAPI::toStringValue(content_type));
         }
         }
-    if(authorization_basic_y2xp_zw50_on_nl_y3_jld_a.hasValue())
+    
     {
-        if (!::OpenAPI::toStringValue(authorization_basic_y2xp_zw50_on_nl_y3_jld_a.value()).isEmpty()) {
-            input.headers.insert("Authorization: Basic Y2xpZW50OnNlY3JldA&#x3D;&#x3D;", ::OpenAPI::toStringValue(authorization_basic_y2xp_zw50_on_nl_y3_jld_a.value()));
+        if (!::OpenAPI::toStringValue(authorization).isEmpty()) {
+            input.headers.insert("Authorization", ::OpenAPI::toStringValue(authorization));
         }
         }
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIAuthApi::postOauthTokenCallback);
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIAuthApi::oauth_postOauthTokenCallback);
     connect(this, &OAIAuthApi::abortRequestsSignal, worker, &QObject::deleteLater);
     connect(worker, &QObject::destroyed, [this](){
         if(findChildren<OAIHttpRequestWorker*>().count() == 0){
@@ -253,7 +253,7 @@ void OAIAuthApi::postOauthToken(const ::OpenAPI::OptionalParam<QString> &content
     worker->execute(&input);
 }
 
-void OAIAuthApi::postOauthTokenCallback(OAIHttpRequestWorker *worker) {
+void OAIAuthApi::oauth_postOauthTokenCallback(OAIHttpRequestWorker *worker) {
     QString msg;
     QString error_str = worker->error_str;
     QNetworkReply::NetworkError error_type = worker->error_type;
@@ -268,11 +268,11 @@ void OAIAuthApi::postOauthTokenCallback(OAIHttpRequestWorker *worker) {
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
-        emit postOauthTokenSignal(output);
-        emit postOauthTokenSignalFull(worker, output);
+        emit oauth_postOauthTokenSignal(output);
+        emit oauth_postOauthTokenSignalFull(worker, output);
     } else {
-        emit postOauthTokenSignalE(output, error_type, error_str);
-        emit postOauthTokenSignalEFull(worker, error_type, error_str);
+        emit oauth_postOauthTokenSignalE(output, error_type, error_str);
+        emit oauth_postOauthTokenSignalEFull(worker, error_type, error_str);
     }
 }
 

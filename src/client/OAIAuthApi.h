@@ -1,6 +1,6 @@
 /**
  * KCS API
- * KCS API
+ * KOMPAS Collaboration Service API
  *
  * The version of the OpenAPI document: 1.0
  * Contact: modievskii_av@ascon.ru
@@ -57,13 +57,13 @@ public:
     QString getParamStyleDelimiter(QString style, QString name, bool isExplode);
 
     /**
-    * @param[in]  content_type_application_x_www_form_urlencoded QString [optional]
-    * @param[in]  authorization_basic_y2xp_zw50_on_nl_y3_jld_a QString [optional]
-    * @param[in]  grant_type QString [optional]
-    * @param[in]  username QString [optional]
-    * @param[in]  password QString [optional]
+    * @param[in]  content_type QString [required]
+    * @param[in]  authorization QString [required]
+    * @param[in]  grant_type QString [required]
+    * @param[in]  username QString [required]
+    * @param[in]  password QString [required]
     */
-    void postOauthToken(const ::OpenAPI::OptionalParam<QString> &content_type_application_x_www_form_urlencoded = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &authorization_basic_y2xp_zw50_on_nl_y3_jld_a = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &grant_type = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &username = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<QString> &password = ::OpenAPI::OptionalParam<QString>());
+    void oauth_postOauthToken(const QString &content_type, const QString &authorization, const QString &grant_type, const QString &username, const QString &password);
 
 
 private:
@@ -80,17 +80,17 @@ private:
     bool isResponseCompressionEnabled;
     bool isRequestCompressionEnabled;
 
-    void postOauthTokenCallback(OAIHttpRequestWorker *worker);
+    void oauth_postOauthTokenCallback(OAIHttpRequestWorker *worker);
 
 signals:
 
-    void postOauthTokenSignal(OAIInline_response_200 summary);
+    void oauth_postOauthTokenSignal(OAIInline_response_200 summary);
 
-    void postOauthTokenSignalFull(OAIHttpRequestWorker *worker, OAIInline_response_200 summary);
+    void oauth_postOauthTokenSignalFull(OAIHttpRequestWorker *worker, OAIInline_response_200 summary);
 
-    void postOauthTokenSignalE(OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str);
+    void oauth_postOauthTokenSignalE(OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void postOauthTokenSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
+    void oauth_postOauthTokenSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
     void abortRequestsSignal();
     void allPendingRequestsCompleted();

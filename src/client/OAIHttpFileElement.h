@@ -1,6 +1,6 @@
 /**
  * KCS API
- * KCS API
+ * KOMPAS Collaboration Service API
  *
  * The version of the OpenAPI document: 1.0
  * Contact: modievskii_av@ascon.ru
