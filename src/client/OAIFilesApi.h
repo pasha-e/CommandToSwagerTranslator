@@ -62,14 +62,14 @@ public:
     * @param[in]  file_ref QString [required]
     * @param[in]  name QString [optional]
     */
-    void getFiles(const QString &file_ref, const ::OpenAPI::OptionalParam<QString> &name = ::OpenAPI::OptionalParam<QString>());
+    void files_getFiles(const QString &file_ref, const ::OpenAPI::OptionalParam<QString> &name = ::OpenAPI::OptionalParam<QString>());
 
     /**
     * @param[in]  content_type QString [required]
     * @param[in]  name QString [optional]
     * @param[in]  body OAIHttpFileElement [optional]
     */
-    void postFiles(const QString &content_type, const ::OpenAPI::OptionalParam<QString> &name = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<OAIHttpFileElement> &body = ::OpenAPI::OptionalParam<OAIHttpFileElement>());
+    void files_postFiles(const QString &content_type, const ::OpenAPI::OptionalParam<QString> &name = ::OpenAPI::OptionalParam<QString>(), const ::OpenAPI::OptionalParam<OAIHttpFileElement> &body = ::OpenAPI::OptionalParam<OAIHttpFileElement>());
 
 
 private:
@@ -86,22 +86,22 @@ private:
     bool isResponseCompressionEnabled;
     bool isRequestCompressionEnabled;
 
-    void getFilesCallback(OAIHttpRequestWorker *worker);
-    void postFilesCallback(OAIHttpRequestWorker *worker);
+    void files_getFilesCallback(OAIHttpRequestWorker *worker);
+    void files_postFilesCallback(OAIHttpRequestWorker *worker);
 
 signals:
 
-    void getFilesSignal();
-    void postFilesSignal(OAIInline_response_201 summary);
+    void files_getFilesSignal(OAIHttpFileElement summary);
+    void files_postFilesSignal(OAIInline_response_201 summary);
 
-    void getFilesSignalFull(OAIHttpRequestWorker *worker);
-    void postFilesSignalFull(OAIHttpRequestWorker *worker, OAIInline_response_201 summary);
+    void files_getFilesSignalFull(OAIHttpRequestWorker *worker, OAIHttpFileElement summary);
+    void files_postFilesSignalFull(OAIHttpRequestWorker *worker, OAIInline_response_201 summary);
 
-    void getFilesSignalE(QNetworkReply::NetworkError error_type, QString error_str);
-    void postFilesSignalE(OAIInline_response_201 summary, QNetworkReply::NetworkError error_type, QString error_str);
+    void files_getFilesSignalE(OAIHttpFileElement summary, QNetworkReply::NetworkError error_type, QString error_str);
+    void files_postFilesSignalE(OAIInline_response_201 summary, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void getFilesSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
-    void postFilesSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
+    void files_getFilesSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
+    void files_postFilesSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
     void abortRequestsSignal();
     void allPendingRequestsCompleted();

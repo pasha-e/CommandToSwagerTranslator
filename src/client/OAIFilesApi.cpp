@@ -37,10 +37,10 @@ void OAIFilesApi::initializeServerConfigs(){
     QUrl("http://kcs.spb.ascon.local/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
-    _serverConfigs.insert("getFiles", defaultConf);
-    _serverIndices.insert("getFiles", 0);
-    _serverConfigs.insert("postFiles", defaultConf);
-    _serverIndices.insert("postFiles", 0);
+    _serverConfigs.insert("files_getFiles", defaultConf);
+    _serverIndices.insert("files_getFiles", 0);
+    _serverConfigs.insert("files_postFiles", defaultConf);
+    _serverIndices.insert("files_postFiles", 0);
 }
 
 /**
@@ -209,8 +209,8 @@ QString OAIFilesApi::getParamStyleDelimiter(QString style, QString name, bool is
     }
 }
 
-void OAIFilesApi::getFiles(const QString &file_ref, const ::OpenAPI::OptionalParam<QString> &name) {
-    QString fullPath = QString(_serverConfigs["getFiles"][_serverIndices.value("getFiles")].URL()+"/files");
+void OAIFilesApi::files_getFiles(const QString &file_ref, const ::OpenAPI::OptionalParam<QString> &name) {
+    QString fullPath = QString(_serverConfigs["files_getFiles"][_serverIndices.value("files_getFiles")].URL()+"/files");
     
     if(!_bearerToken.isEmpty())
         addHeaders("Authorization", "Bearer " + _bearerToken);
@@ -254,7 +254,7 @@ void OAIFilesApi::getFiles(const QString &file_ref, const ::OpenAPI::OptionalPar
 
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIFilesApi::getFilesCallback);
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIFilesApi::files_getFilesCallback);
     connect(this, &OAIFilesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     connect(worker, &QObject::destroyed, [this](){
         if(findChildren<OAIHttpRequestWorker*>().count() == 0){
@@ -265,7 +265,7 @@ void OAIFilesApi::getFiles(const QString &file_ref, const ::OpenAPI::OptionalPar
     worker->execute(&input);
 }
 
-void OAIFilesApi::getFilesCallback(OAIHttpRequestWorker *worker) {
+void OAIFilesApi::files_getFilesCallback(OAIHttpRequestWorker *worker) {
     QString msg;
     QString error_str = worker->error_str;
     QNetworkReply::NetworkError error_type = worker->error_type;
@@ -276,19 +276,20 @@ void OAIFilesApi::getFilesCallback(OAIHttpRequestWorker *worker) {
         msg = "Error: " + worker->error_str;
         error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
     }
+    OAIHttpFileElement output = worker->getHttpFileElement();
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
-        emit getFilesSignal();
-        emit getFilesSignalFull(worker);
+        emit files_getFilesSignal(output);
+        emit files_getFilesSignalFull(worker, output);
     } else {
-        emit getFilesSignalE(error_type, error_str);
-        emit getFilesSignalEFull(worker, error_type, error_str);
+        emit files_getFilesSignalE(output, error_type, error_str);
+        emit files_getFilesSignalEFull(worker, error_type, error_str);
     }
 }
 
-void OAIFilesApi::postFiles(const QString &content_type, const ::OpenAPI::OptionalParam<QString> &name, const ::OpenAPI::OptionalParam<OAIHttpFileElement> &body) {
-    QString fullPath = QString(_serverConfigs["postFiles"][_serverIndices.value("postFiles")].URL()+"/files");
+void OAIFilesApi::files_postFiles(const QString &content_type, const ::OpenAPI::OptionalParam<QString> &name, const ::OpenAPI::OptionalParam<OAIHttpFileElement> &body) {
+    QString fullPath = QString(_serverConfigs["files_postFiles"][_serverIndices.value("files_postFiles")].URL()+"/files");
     
     QString queryPrefix, querySuffix, queryDelimiter, queryStyle;
     if(name.hasValue())
@@ -324,7 +325,7 @@ input.headers.insert("Content-Type", "application/octet-stream");
         }
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIFilesApi::postFilesCallback);
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIFilesApi::files_postFilesCallback);
     connect(this, &OAIFilesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     connect(worker, &QObject::destroyed, [this](){
         if(findChildren<OAIHttpRequestWorker*>().count() == 0){
@@ -335,7 +336,7 @@ input.headers.insert("Content-Type", "application/octet-stream");
     worker->execute(&input);
 }
 
-void OAIFilesApi::postFilesCallback(OAIHttpRequestWorker *worker) {
+void OAIFilesApi::files_postFilesCallback(OAIHttpRequestWorker *worker) {
     QString msg;
     QString error_str = worker->error_str;
     QNetworkReply::NetworkError error_type = worker->error_type;
@@ -350,11 +351,11 @@ void OAIFilesApi::postFilesCallback(OAIHttpRequestWorker *worker) {
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
-        emit postFilesSignal(output);
-        emit postFilesSignalFull(worker, output);
+        emit files_postFilesSignal(output);
+        emit files_postFilesSignalFull(worker, output);
     } else {
-        emit postFilesSignalE(output, error_type, error_str);
-        emit postFilesSignalEFull(worker, error_type, error_str);
+        emit files_postFilesSignalE(output, error_type, error_str);
+        emit files_postFilesSignalEFull(worker, error_type, error_str);
     }
 }
 

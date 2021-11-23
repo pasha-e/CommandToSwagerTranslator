@@ -121,8 +121,8 @@ Class | Method | HTTP request | Description
 *OAIAssemblyPartApi* | [**assemblyPart_getByGuid**](OAIAssemblyPartApi.md#assemblyPart_getByGuid) | **GET** /entities/assembly-part/{guid} | Получить assembly part по GUID
 *OAIAuthApi* | [**oauth_postOauthToken**](OAIAuthApi.md#oauth_postOauthToken) | **POST** /oauth/token | Get auth token
 *OAIDefaultApi* | [**assembly_post**](OAIDefaultApi.md#assembly_post) | **POST** /entities/assembly/{guid} | Сохранить Assembly
-*OAIFilesApi* | [**getFiles**](OAIFilesApi.md#getFiles) | **GET** /files | Получить файл с сервера
-*OAIFilesApi* | [**postFiles**](OAIFilesApi.md#postFiles) | **POST** /files | Загрузить файл на сервер
+*OAIFilesApi* | [**files_getFiles**](OAIFilesApi.md#files_getFiles) | **GET** /files | Получить файл с сервера
+*OAIFilesApi* | [**files_postFiles**](OAIFilesApi.md#files_postFiles) | **POST** /files | Загрузить файл на сервер
 *OAIWorkspaceApi* | [**workspace_getById**](OAIWorkspaceApi.md#workspace_getById) | **GET** /entities/workspace/{guid} | Получить workspace
 *OAIWorkspaceApi* | [**workspace_getListWorkspace**](OAIWorkspaceApi.md#workspace_getListWorkspace) | **GET** /entities/workspace | Получить список workspace
 *OAIWorkspaceApi* | [**workspace_post**](OAIWorkspaceApi.md#workspace_post) | **POST** /entities/workspace/{guid} | Сохранить workspace
