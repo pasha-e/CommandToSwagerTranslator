@@ -470,7 +470,7 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
         }
         std::cout << "----------------------------------" << std::endl;        
 
-        if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("inline"))) { 
+        if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("attachment"))) { 
             QString filename = QUuid::createUuid().toString();
             for (const auto &file : contentDisposition) {
                 if (file.contains(QString("filename"))) {
