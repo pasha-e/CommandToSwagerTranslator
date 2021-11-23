@@ -75,6 +75,11 @@ public:
     bool is_show_Set() const;
     bool is_show_Valid() const;
 
+    QString getFileRef() const;
+    void setFileRef(const QString &file_ref);
+    bool is_file_ref_Set() const;
+    bool is_file_ref_Valid() const;
+
     virtual bool isSet() const override;
     virtual bool isValid() const override;
 
@@ -108,6 +113,10 @@ private:
     bool show;
     bool m_show_isSet;
     bool m_show_isValid;
+
+    QString file_ref;
+    bool m_file_ref_isSet;
+    bool m_file_ref_isValid;
 };
 
 } // namespace OpenAPI

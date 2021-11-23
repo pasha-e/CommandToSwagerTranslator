@@ -54,6 +54,9 @@ void OAIWorkspace::initializeModel() {
 
     m_show_isSet = false;
     m_show_isValid = false;
+
+    m_file_ref_isSet = false;
+    m_file_ref_isValid = false;
 }
 
 void OAIWorkspace::fromJson(QString jsonString) {
@@ -85,6 +88,9 @@ void OAIWorkspace::fromJsonObject(QJsonObject json) {
 
     m_show_isValid = ::OpenAPI::fromJsonValue(show, json[QString("show")]);
     m_show_isSet = !json[QString("show")].isNull() && m_show_isValid;
+
+    m_file_ref_isValid = ::OpenAPI::fromJsonValue(file_ref, json[QString("fileRef")]);
+    m_file_ref_isSet = !json[QString("fileRef")].isNull() && m_file_ref_isValid;
 }
 
 QString OAIWorkspace::asJson() const {
@@ -116,6 +122,9 @@ QJsonObject OAIWorkspace::asJsonObject() const {
     }
     if (m_show_isSet) {
         obj.insert(QString("show"), ::OpenAPI::toJsonValue(show));
+    }
+    if (m_file_ref_isSet) {
+        obj.insert(QString("fileRef"), ::OpenAPI::toJsonValue(file_ref));
     }
     return obj;
 }
@@ -232,6 +241,22 @@ bool OAIWorkspace::is_show_Valid() const{
     return m_show_isValid;
 }
 
+QString OAIWorkspace::getFileRef() const {
+    return file_ref;
+}
+void OAIWorkspace::setFileRef(const QString &file_ref) {
+    this->file_ref = file_ref;
+    this->m_file_ref_isSet = true;
+}
+
+bool OAIWorkspace::is_file_ref_Set() const{
+    return m_file_ref_isSet;
+}
+
+bool OAIWorkspace::is_file_ref_Valid() const{
+    return m_file_ref_isValid;
+}
+
 bool OAIWorkspace::isSet() const {
     bool isObjectUpdated = false;
     do {
@@ -269,13 +294,18 @@ bool OAIWorkspace::isSet() const {
             isObjectUpdated = true;
             break;
         }
+
+        if (m_file_ref_isSet) {
+            isObjectUpdated = true;
+            break;
+        }
     } while (false);
     return isObjectUpdated;
 }
 
 bool OAIWorkspace::isValid() const {
     // only required properties are required for the object to be considered valid
-    return m_id_isValid && m_name_isValid && m_simple_surface_params_isValid && m_full_surface_params_isValid && m_simple_collection_params_isValid && m_full_collection_params_isValid && true;
+    return m_id_isValid && m_name_isValid && m_simple_surface_params_isValid && m_full_surface_params_isValid && m_simple_collection_params_isValid && m_full_collection_params_isValid && m_show_isValid && m_file_ref_isValid && true;
 }
 
 } // namespace OpenAPI
