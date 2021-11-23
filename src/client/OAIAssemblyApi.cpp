@@ -34,7 +34,7 @@ void OAIAssemblyApi::initializeServerConfigs(){
     //varying endpoint server
     QList<OAIServerConfiguration> serverConf = QList<OAIServerConfiguration>();
     defaultConf.append(OAIServerConfiguration(
-    QUrl("http://localhost:3000/api/v1/rest"),
+    QUrl("http://kcs.spb.ascon.local/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
     _serverConfigs.insert("assembly_getByGuid", defaultConf);
@@ -209,6 +209,9 @@ QString OAIAssemblyApi::getParamStyleDelimiter(QString style, QString name, bool
 
 void OAIAssemblyApi::assembly_getByGuid(const QString &guid) {
     QString fullPath = QString(_serverConfigs["assembly_getByGuid"][_serverIndices.value("assembly_getByGuid")].URL()+"/entities/assembly/{guid}");
+    
+    if(!_bearerToken.isEmpty())
+        addHeaders("Authorization", "Bearer " + _bearerToken);
     
     
     {

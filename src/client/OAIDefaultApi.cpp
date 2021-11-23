@@ -34,7 +34,7 @@ void OAIDefaultApi::initializeServerConfigs(){
     //varying endpoint server
     QList<OAIServerConfiguration> serverConf = QList<OAIServerConfiguration>();
     defaultConf.append(OAIServerConfiguration(
-    QUrl("http://localhost:3000/api/v1/rest"),
+    QUrl("http://kcs.spb.ascon.local/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
     _serverConfigs.insert("assembly_post", defaultConf);

@@ -9,6 +9,7 @@ HEADERS += \
     $${PWD}/OAICoordinate.h \
     $${PWD}/OAIGuid.h \
     $${PWD}/OAIInline_response_200.h \
+    $${PWD}/OAIInline_response_201.h \
     $${PWD}/OAILimitingBox.h \
     $${PWD}/OAIRenderingParams.h \
     $${PWD}/OAIWorkspace.h \
@@ -17,6 +18,7 @@ HEADERS += \
     $${PWD}/OAIAssemblyPartApi.h \
     $${PWD}/OAIAuthApi.h \
     $${PWD}/OAIDefaultApi.h \
+    $${PWD}/OAIFilesApi.h \
     $${PWD}/OAIWorkspaceApi.h \
 # Others
     $${PWD}/OAIHelpers.h \
@@ -36,6 +38,7 @@ SOURCES += \
     $${PWD}/OAICoordinate.cpp \
     $${PWD}/OAIGuid.cpp \
     $${PWD}/OAIInline_response_200.cpp \
+    $${PWD}/OAIInline_response_201.cpp \
     $${PWD}/OAILimitingBox.cpp \
     $${PWD}/OAIRenderingParams.cpp \
     $${PWD}/OAIWorkspace.cpp \
@@ -44,6 +47,7 @@ SOURCES += \
     $${PWD}/OAIAssemblyPartApi.cpp \
     $${PWD}/OAIAuthApi.cpp \
     $${PWD}/OAIDefaultApi.cpp \
+    $${PWD}/OAIFilesApi.cpp \
     $${PWD}/OAIWorkspaceApi.cpp \
 # Others
     $${PWD}/OAIHelpers.cpp \

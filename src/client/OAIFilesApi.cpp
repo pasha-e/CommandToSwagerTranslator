@@ -10,14 +10,14 @@
  * Do not edit the class manually.
  */
 
-#include "OAIAssemblyPartApi.h"
+#include "OAIFilesApi.h"
 #include "OAIServerConfiguration.h"
 #include <QJsonArray>
 #include <QJsonDocument>
 
 namespace OpenAPI {
 
-OAIAssemblyPartApi::OAIAssemblyPartApi(const int timeOut)
+OAIFilesApi::OAIFilesApi(const int timeOut)
     : _timeOut(timeOut),
       _manager(nullptr),
       isResponseCompressionEnabled(false),
@@ -25,10 +25,10 @@ OAIAssemblyPartApi::OAIAssemblyPartApi(const int timeOut)
     initializeServerConfigs();
 }
 
-OAIAssemblyPartApi::~OAIAssemblyPartApi() {
+OAIFilesApi::~OAIFilesApi() {
 }
 
-void OAIAssemblyPartApi::initializeServerConfigs(){
+void OAIFilesApi::initializeServerConfigs(){
     //Default server
     QList<OAIServerConfiguration> defaultConf = QList<OAIServerConfiguration>();
     //varying endpoint server
@@ -37,54 +37,54 @@ void OAIAssemblyPartApi::initializeServerConfigs(){
     QUrl("http://kcs.spb.ascon.local/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
-    _serverConfigs.insert("assemblyPart_getByCriteria", defaultConf);
-    _serverIndices.insert("assemblyPart_getByCriteria", 0);
-    _serverConfigs.insert("assemblyPart_getByGuid", defaultConf);
-    _serverIndices.insert("assemblyPart_getByGuid", 0);
+    _serverConfigs.insert("getFiles", defaultConf);
+    _serverIndices.insert("getFiles", 0);
+    _serverConfigs.insert("postFiles", defaultConf);
+    _serverIndices.insert("postFiles", 0);
 }
 
 /**
 * returns 0 on success and -1, -2 or -3 on failure.
 * -1 when the variable does not exist and -2 if the value is not defined in the enum and -3 if the operation or server index is not found
 */
-int OAIAssemblyPartApi::setDefaultServerValue(int serverIndex, const QString &operation, const QString &variable, const QString &value){
+int OAIFilesApi::setDefaultServerValue(int serverIndex, const QString &operation, const QString &variable, const QString &value){
     auto it = _serverConfigs.find(operation);
     if(it != _serverConfigs.end() && serverIndex < it.value().size() ){
       return _serverConfigs[operation][serverIndex].setDefaultValue(variable,value);
     }
     return -3;
 }
-void OAIAssemblyPartApi::setServerIndex(const QString &operation, int serverIndex){
+void OAIFilesApi::setServerIndex(const QString &operation, int serverIndex){
     if(_serverIndices.contains(operation) && serverIndex < _serverConfigs.find(operation).value().size() )
         _serverIndices[operation] = serverIndex;
 }
 
-void OAIAssemblyPartApi::setApiKey(const QString &apiKeyName, const QString &apiKey){
+void OAIFilesApi::setApiKey(const QString &apiKeyName, const QString &apiKey){
     _apiKeys.insert(apiKeyName,apiKey);
 }
 
-void OAIAssemblyPartApi::setBearerToken(const QString &token){
+void OAIFilesApi::setBearerToken(const QString &token){
     _bearerToken = token;
 }
 
-void OAIAssemblyPartApi::setUsername(const QString &username) {
+void OAIFilesApi::setUsername(const QString &username) {
     _username = username;
 }
 
-void OAIAssemblyPartApi::setPassword(const QString &password) {
+void OAIFilesApi::setPassword(const QString &password) {
     _password = password;
 }
 
 
-void OAIAssemblyPartApi::setTimeOut(const int timeOut) {
+void OAIFilesApi::setTimeOut(const int timeOut) {
     _timeOut = timeOut;
 }
 
-void OAIAssemblyPartApi::setWorkingDirectory(const QString &path) {
+void OAIFilesApi::setWorkingDirectory(const QString &path) {
     _workingDirectory = path;
 }
 
-void OAIAssemblyPartApi::setNetworkAccessManager(QNetworkAccessManager* manager) {
+void OAIFilesApi::setNetworkAccessManager(QNetworkAccessManager* manager) {
     _manager = manager;
 }
 
@@ -96,7 +96,7 @@ void OAIAssemblyPartApi::setNetworkAccessManager(QNetworkAccessManager* manager)
     * @param variables A map between a variable name and its value. The value is used for substitution in the server's URL template.
     * returns the index of the new server config on success and -1 if the operation is not found
     */
-int OAIAssemblyPartApi::addServerConfiguration(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
+int OAIFilesApi::addServerConfiguration(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
     if(_serverConfigs.contains(operation)){
         _serverConfigs[operation].append(OAIServerConfiguration(
                     url,
@@ -114,7 +114,7 @@ int OAIAssemblyPartApi::addServerConfiguration(const QString &operation, const Q
     * @param description A String that describes the server
     * @param variables A map between a variable name and its value. The value is used for substitution in the server's URL template.
     */
-void OAIAssemblyPartApi::setNewServerForAllOperations(const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
+void OAIFilesApi::setNewServerForAllOperations(const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
     for(auto e : _serverIndices.keys()){
         setServerIndex(e, addServerConfiguration(e, url, description, variables));
     }
@@ -126,27 +126,27 @@ void OAIAssemblyPartApi::setNewServerForAllOperations(const QUrl &url, const QSt
     * @param description A String that describes the server
     * @param variables A map between a variable name and its value. The value is used for substitution in the server's URL template.
     */
-void OAIAssemblyPartApi::setNewServer(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
+void OAIFilesApi::setNewServer(const QString &operation, const QUrl &url, const QString &description, const QMap<QString, OAIServerVariable> &variables){
     setServerIndex(operation, addServerConfiguration(operation, url, description, variables));
 }
 
-void OAIAssemblyPartApi::addHeaders(const QString &key, const QString &value) {
+void OAIFilesApi::addHeaders(const QString &key, const QString &value) {
     defaultHeaders.insert(key, value);
 }
 
-void OAIAssemblyPartApi::enableRequestCompression() {
+void OAIFilesApi::enableRequestCompression() {
     isRequestCompressionEnabled = true;
 }
 
-void OAIAssemblyPartApi::enableResponseCompression() {
+void OAIFilesApi::enableResponseCompression() {
     isResponseCompressionEnabled = true;
 }
 
-void OAIAssemblyPartApi::abortRequests(){
+void OAIFilesApi::abortRequests(){
     emit abortRequestsSignal();
 }
 
-QString OAIAssemblyPartApi::getParamStylePrefix(QString style){
+QString OAIFilesApi::getParamStylePrefix(QString style){
     if(style == "matrix"){
         return ";";
     }else if(style == "label"){
@@ -164,7 +164,7 @@ QString OAIAssemblyPartApi::getParamStylePrefix(QString style){
     }
 }
 
-QString OAIAssemblyPartApi::getParamStyleSuffix(QString style){
+QString OAIFilesApi::getParamStyleSuffix(QString style){
     if(style == "matrix"){
         return "=";
     }else if(style == "label"){
@@ -182,7 +182,7 @@ QString OAIAssemblyPartApi::getParamStyleSuffix(QString style){
     }
 }
 
-QString OAIAssemblyPartApi::getParamStyleDelimiter(QString style, QString name, bool isExplode){
+QString OAIFilesApi::getParamStyleDelimiter(QString style, QString name, bool isExplode){
 
     if(style == "matrix"){
         return (isExplode) ? ";" + name + "=" : ",";
@@ -209,86 +209,42 @@ QString OAIAssemblyPartApi::getParamStyleDelimiter(QString style, QString name, 
     }
 }
 
-void OAIAssemblyPartApi::assemblyPart_getByCriteria(const ::OpenAPI::OptionalParam<OAIAssemblyPartSearchCriteria> &oai_assembly_part_search_criteria) {
-    QString fullPath = QString(_serverConfigs["assemblyPart_getByCriteria"][_serverIndices.value("assemblyPart_getByCriteria")].URL()+"/entities/assembly-part");
+void OAIFilesApi::getFiles(const QString &file_ref, const ::OpenAPI::OptionalParam<QString> &name) {
+    QString fullPath = QString(_serverConfigs["getFiles"][_serverIndices.value("getFiles")].URL()+"/files");
     
     if(!_bearerToken.isEmpty())
         addHeaders("Authorization", "Bearer " + _bearerToken);
     
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-    if(oai_assembly_part_search_criteria.hasValue()){
-
-        QByteArray output = oai_assembly_part_search_criteria.value().asJson().toUtf8();
-        input.request_body.append(output);
-    }
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIAssemblyPartApi::assemblyPart_getByCriteriaCallback);
-    connect(this, &OAIAssemblyPartApi::abortRequestsSignal, worker, &QObject::deleteLater);
-    connect(worker, &QObject::destroyed, [this](){
-        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
-            emit allPendingRequestsCompleted();
-        }
-    });
-
-    worker->execute(&input);
-}
-
-void OAIAssemblyPartApi::assemblyPart_getByCriteriaCallback(OAIHttpRequestWorker *worker) {
-    QString msg;
-    QString error_str = worker->error_str;
-    QNetworkReply::NetworkError error_type = worker->error_type;
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        msg = QString("Success! %1 bytes").arg(worker->response.length());
-    } else {
-        msg = "Error: " + worker->error_str;
-        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
-    }
-    QList<OAIAssemblyPart> output;
-    QString json(worker->response);
-    QByteArray array(json.toStdString().c_str());
-    QJsonDocument doc = QJsonDocument::fromJson(array);
-    QJsonArray jsonArray = doc.array();
-    foreach (QJsonValue obj, jsonArray) {
-        OAIAssemblyPart val;
-        ::OpenAPI::fromJsonValue(val, obj);
-        output.append(val);
-    }
-    worker->deleteLater();
-
-    if (worker->error_type == QNetworkReply::NoError) {
-        emit assemblyPart_getByCriteriaSignal(output);
-        emit assemblyPart_getByCriteriaSignalFull(worker, output);
-    } else {
-        emit assemblyPart_getByCriteriaSignalE(output, error_type, error_str);
-        emit assemblyPart_getByCriteriaSignalEFull(worker, error_type, error_str);
-    }
-}
-
-void OAIAssemblyPartApi::assemblyPart_getByGuid(const QString &guid) {
-    QString fullPath = QString(_serverConfigs["assemblyPart_getByGuid"][_serverIndices.value("assemblyPart_getByGuid")].URL()+"/entities/assembly-part/{guid}");
-    
-    if(!_bearerToken.isEmpty())
-        addHeaders("Authorization", "Bearer " + _bearerToken);
-    
+    QString queryPrefix, querySuffix, queryDelimiter, queryStyle;
     
     {
-        QString guidPathParam("{");
-        guidPathParam.append("guid").append("}");
-        QString pathPrefix, pathSuffix, pathDelimiter;
-        QString pathStyle = "simple";
-        if(pathStyle == "")
-            pathStyle = "simple";
-        pathPrefix = getParamStylePrefix(pathStyle);
-        pathSuffix = getParamStyleSuffix(pathStyle);
-        pathDelimiter = getParamStyleDelimiter(pathStyle, "guid", false);
-        QString paramString = (pathStyle == "matrix") ? pathPrefix+"guid"+pathSuffix : pathPrefix;
-        fullPath.replace(guidPathParam, paramString+QUrl::toPercentEncoding(::OpenAPI::toStringValue(guid)));
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "fileRef", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("fileRef")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(file_ref)));
+    }
+    if(name.hasValue())
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "name", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("name")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(name.value())));
     }
     OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
     worker->setTimeOut(_timeOut);
@@ -298,8 +254,8 @@ void OAIAssemblyPartApi::assemblyPart_getByGuid(const QString &guid) {
 
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIAssemblyPartApi::assemblyPart_getByGuidCallback);
-    connect(this, &OAIAssemblyPartApi::abortRequestsSignal, worker, &QObject::deleteLater);
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIFilesApi::getFilesCallback);
+    connect(this, &OAIFilesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     connect(worker, &QObject::destroyed, [this](){
         if(findChildren<OAIHttpRequestWorker*>().count() == 0){
             emit allPendingRequestsCompleted();
@@ -309,7 +265,7 @@ void OAIAssemblyPartApi::assemblyPart_getByGuid(const QString &guid) {
     worker->execute(&input);
 }
 
-void OAIAssemblyPartApi::assemblyPart_getByGuidCallback(OAIHttpRequestWorker *worker) {
+void OAIFilesApi::getFilesCallback(OAIHttpRequestWorker *worker) {
     QString msg;
     QString error_str = worker->error_str;
     QNetworkReply::NetworkError error_type = worker->error_type;
@@ -320,15 +276,85 @@ void OAIAssemblyPartApi::assemblyPart_getByGuidCallback(OAIHttpRequestWorker *wo
         msg = "Error: " + worker->error_str;
         error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
     }
-    OAIAssemblyPart output(QString(worker->response));
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
-        emit assemblyPart_getByGuidSignal(output);
-        emit assemblyPart_getByGuidSignalFull(worker, output);
+        emit getFilesSignal();
+        emit getFilesSignalFull(worker);
     } else {
-        emit assemblyPart_getByGuidSignalE(output, error_type, error_str);
-        emit assemblyPart_getByGuidSignalEFull(worker, error_type, error_str);
+        emit getFilesSignalE(error_type, error_str);
+        emit getFilesSignalEFull(worker, error_type, error_str);
+    }
+}
+
+void OAIFilesApi::postFiles(const QString &content_type, const ::OpenAPI::OptionalParam<QString> &name, const ::OpenAPI::OptionalParam<OAIHttpFileElement> &body) {
+    QString fullPath = QString(_serverConfigs["postFiles"][_serverIndices.value("postFiles")].URL()+"/files");
+    
+    QString queryPrefix, querySuffix, queryDelimiter, queryStyle;
+    if(name.hasValue())
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "name", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("name")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(name.value())));
+    }
+    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
+    worker->setTimeOut(_timeOut);
+    worker->setWorkingDirectory(_workingDirectory);
+    OAIHttpRequestInput input(fullPath, "POST");
+
+    if(body.hasValue()){
+input.headers.insert("Content-Type", "application/octet-stream");
+        QByteArray output = body.value().asByteArray();
+        input.request_body.append(output);
+    }
+    
+    {
+        if (!::OpenAPI::toStringValue(content_type).isEmpty()) {
+            input.headers.insert("Content-Type", ::OpenAPI::toStringValue(content_type));
+        }
+        }
+    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
+
+    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIFilesApi::postFilesCallback);
+    connect(this, &OAIFilesApi::abortRequestsSignal, worker, &QObject::deleteLater);
+    connect(worker, &QObject::destroyed, [this](){
+        if(findChildren<OAIHttpRequestWorker*>().count() == 0){
+            emit allPendingRequestsCompleted();
+        }
+    });
+
+    worker->execute(&input);
+}
+
+void OAIFilesApi::postFilesCallback(OAIHttpRequestWorker *worker) {
+    QString msg;
+    QString error_str = worker->error_str;
+    QNetworkReply::NetworkError error_type = worker->error_type;
+
+    if (worker->error_type == QNetworkReply::NoError) {
+        msg = QString("Success! %1 bytes").arg(worker->response.length());
+    } else {
+        msg = "Error: " + worker->error_str;
+        error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
+    }
+    OAIInline_response_201 output(QString(worker->response));
+    worker->deleteLater();
+
+    if (worker->error_type == QNetworkReply::NoError) {
+        emit postFilesSignal(output);
+        emit postFilesSignalFull(worker, output);
+    } else {
+        emit postFilesSignalE(output, error_type, error_str);
+        emit postFilesSignalEFull(worker, error_type, error_str);
     }
 }
 

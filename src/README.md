@@ -89,7 +89,10 @@ QString Example::create(){
 
 void Example::exampleFunction1(){
      OAIAssemblyApi apiInstance;
-             
+     
+      // Configure HTTP bearer authorization: access_token
+      apiInstance.setBearerToken("BEARER TOKEN");
+        
       QEventLoop loop;
       connect(&apiInstance, &OAIAssemblyApi::assembly_getByGuidSignal, [&]() {
           loop.quit();
@@ -109,7 +112,7 @@ void Example::exampleFunction1(){
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:3000/api/v1/rest*
+All URIs are relative to *http://kcs.spb.ascon.local/api/v1/rest*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -118,6 +121,8 @@ Class | Method | HTTP request | Description
 *OAIAssemblyPartApi* | [**assemblyPart_getByGuid**](OAIAssemblyPartApi.md#assemblyPart_getByGuid) | **GET** /entities/assembly-part/{guid} | Получить assembly part по GUID
 *OAIAuthApi* | [**oauth_postOauthToken**](OAIAuthApi.md#oauth_postOauthToken) | **POST** /oauth/token | Get auth token
 *OAIDefaultApi* | [**assembly_post**](OAIDefaultApi.md#assembly_post) | **POST** /entities/assembly/{guid} | Сохранить Assembly
+*OAIFilesApi* | [**getFiles**](OAIFilesApi.md#getFiles) | **GET** /files | Получить файл с сервера
+*OAIFilesApi* | [**postFiles**](OAIFilesApi.md#postFiles) | **POST** /files | Загрузить файл на сервер
 *OAIWorkspaceApi* | [**workspace_getById**](OAIWorkspaceApi.md#workspace_getById) | **GET** /entities/workspace/{guid} | Получить workspace
 *OAIWorkspaceApi* | [**workspace_getListWorkspace**](OAIWorkspaceApi.md#workspace_getListWorkspace) | **GET** /entities/workspace | Получить список workspace
 *OAIWorkspaceApi* | [**workspace_post**](OAIWorkspaceApi.md#workspace_post) | **POST** /entities/workspace/{guid} | Сохранить workspace
@@ -132,6 +137,7 @@ Class | Method | HTTP request | Description
  - [OAICoordinate](OAICoordinate.md)
  - [OAIGuid](OAIGuid.md)
  - [OAIInline_response_200](OAIInline_response_200.md)
+ - [OAIInline_response_201](OAIInline_response_201.md)
  - [OAILimitingBox](OAILimitingBox.md)
  - [OAIRenderingParams](OAIRenderingParams.md)
  - [OAIWorkspace](OAIWorkspace.md)

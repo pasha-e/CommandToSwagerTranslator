@@ -34,7 +34,7 @@ void OAIWorkspaceApi::initializeServerConfigs(){
     //varying endpoint server
     QList<OAIServerConfiguration> serverConf = QList<OAIServerConfiguration>();
     defaultConf.append(OAIServerConfiguration(
-    QUrl("http://localhost:3000/api/v1/rest"),
+    QUrl("http://kcs.spb.ascon.local/api/v1/rest"),
     "No description provided",
     QMap<QString, OAIServerVariable>()));
     _serverConfigs.insert("workspace_getById", defaultConf);
@@ -213,6 +213,9 @@ QString OAIWorkspaceApi::getParamStyleDelimiter(QString style, QString name, boo
 
 void OAIWorkspaceApi::workspace_getById(const QString &guid, const ::OpenAPI::OptionalParam<QString> &fetch_plan) {
     QString fullPath = QString(_serverConfigs["workspace_getById"][_serverIndices.value("workspace_getById")].URL()+"/entities/workspace/{guid}");
+    
+    if(!_bearerToken.isEmpty())
+        addHeaders("Authorization", "Bearer " + _bearerToken);
     
     
     {

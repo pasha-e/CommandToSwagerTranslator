@@ -17,7 +17,9 @@
 #include "OAIHttpRequest.h"
 #include "OAIServerConfiguration.h"
 
+#include "OAIBasic_error.h"
 #include "OAIInline_response_200.h"
+#include "OAIObject.h"
 #include <QString>
 
 #include <QObject>

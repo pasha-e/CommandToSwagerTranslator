@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}
     OAICoordinate.cpp
     OAIGuid.cpp
     OAIInline_response_200.cpp
+    OAIInline_response_201.cpp
     OAILimitingBox.cpp
     OAIRenderingParams.cpp
     OAIWorkspace.cpp
@@ -29,6 +30,7 @@ add_library(${PROJECT_NAME}
     OAIAssemblyPartApi.cpp
     OAIAuthApi.cpp
     OAIDefaultApi.cpp
+    OAIFilesApi.cpp
     OAIWorkspaceApi.cpp
     OAIHelpers.cpp
     OAIHttpRequest.cpp
