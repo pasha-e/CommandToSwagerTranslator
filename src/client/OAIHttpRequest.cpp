@@ -448,28 +448,13 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
             contentEncodingHdr = getResponseHeaders().value(hdr);
         }
     }
-
-    std::cout << "++++++++++++++++" << std::endl;
-
-    std::cout << contentTypeHdr.toStdString() << std::endl;
-
-    std::cout << "++++++++++++++++" << std::endl;
-
+    
     if (!contentDispositionHdr.isEmpty()) {
         auto contentDisposition = contentDispositionHdr.split(QString(";"), SKIP_EMPTY_PARTS);
         auto contentType =
             !contentTypeHdr.isEmpty() ? contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS).first() : QString();
 
-
-        std::cout << "----------------------------------" << std::endl;
-        foreach (QString value,  contentDisposition)
-        {
-            
-            std::cout << value.toStdString() << std::endl;
-            
-        }
-        std::cout << "----------------------------------" << std::endl;        
-
+        
         if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("attachment"))) { 
             QString filename = QUuid::createUuid().toString();
             for (const auto &file : contentDisposition) {
@@ -480,10 +465,11 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
             }
             OAIHttpFileElement felement;
 
-            std::cout << "Lengt :" << reply->readAll().length() << std::endl;
+            //QString dir = workingDirectory + QDir::separator();
+            //std::cout << dir.toStdString() << std::endl;
             
 
-            felement.saveToFile(QString(), workingDirectory + QDir::separator() + filename, filename, contentType, reply->readAll());
+            felement.saveToFile(QString(), workingDirectory + QDir::separator() + filename, filename, contentType, reply->readAll());            
             files.insert(filename, felement);
         }
 
