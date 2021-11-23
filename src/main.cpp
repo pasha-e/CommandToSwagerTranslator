@@ -132,7 +132,8 @@ void testGetFilesFunction()
 {
     OpenAPI::OAIFilesApi    apiInstance;
     apiInstance.setTimeOut(10000);    
-    apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+   // apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setNewServerForAllOperations(QUrl("https://kcs.seabis.ru/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
     apiInstance.setBearerToken(_accessToken);
 
     QEventLoop loop;
