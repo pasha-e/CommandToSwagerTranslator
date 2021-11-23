@@ -18,6 +18,8 @@
 #include <QUrl>
 #include <QUuid>
 #include <QtGlobal>
+#include <iostream>
+#include <conio.h>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     #define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
 #else
@@ -447,11 +449,28 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
         }
     }
 
+    std::cout << "++++++++++++++++" << std::endl;
+
+    std::cout << contentTypeHdr.toStdString() << std::endl;
+
+    std::cout << "++++++++++++++++" << std::endl;
+
     if (!contentDispositionHdr.isEmpty()) {
         auto contentDisposition = contentDispositionHdr.split(QString(";"), SKIP_EMPTY_PARTS);
         auto contentType =
             !contentTypeHdr.isEmpty() ? contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS).first() : QString();
-        if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("attachment"))) {
+
+
+        std::cout << "----------------------------------" << std::endl;
+        foreach (QString value,  contentDisposition)
+        {
+            
+            std::cout << value.toStdString() << std::endl;
+            
+        }
+        std::cout << "----------------------------------" << std::endl;        
+
+        if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("inline"))) { 
             QString filename = QUuid::createUuid().toString();
             for (const auto &file : contentDisposition) {
                 if (file.contains(QString("filename"))) {
@@ -460,12 +479,17 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
                 }
             }
             OAIHttpFileElement felement;
+
+            std::cout << "Lengt :" << reply->readAll().length() << std::endl;
+            
+
             felement.saveToFile(QString(), workingDirectory + QDir::separator() + filename, filename, contentType, reply->readAll());
             files.insert(filename, felement);
         }
 
     } else if (!contentTypeHdr.isEmpty()) {
-        auto contentType = contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS);
+        auto contentType = contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS);       
+
         if ((contentType.count() > 0) && (contentType.first() == QString("multipart/form-data"))) {
             // TODO : Handle Multipart responses
         } else {

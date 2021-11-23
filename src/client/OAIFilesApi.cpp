@@ -279,7 +279,7 @@ void OAIFilesApi::files_getFilesCallback(OAIHttpRequestWorker *worker) {
         msg = "Error: " + worker->error_str;
         error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
     }
-
+    //--
     foreach (QString key, worker->getResponseHeaders().keys())
     {
         std::cout << key.toStdString() << "   " << worker->getResponseHeaders()[key].toStdString() << std::endl;
@@ -292,7 +292,8 @@ void OAIFilesApi::files_getFilesCallback(OAIHttpRequestWorker *worker) {
         << std::endl << worker->getHttpFileElement().request_filename.toStdString() 
         <<  std::endl << worker->getHttpFileElement().mime_type.toStdString()
         << std::endl << worker->getHttpFileElement().variable_name.toStdString() << std::endl;
-      
+    //--  
+   
 
     OAIHttpFileElement output = worker->getHttpFileElement();    
     worker->deleteLater();

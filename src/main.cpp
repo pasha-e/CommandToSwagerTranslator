@@ -229,7 +229,7 @@ void OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetwork
 void OnGetFilesSignal(OpenAPI::OAIHttpFileElement summary)
 {
     std::cout << "getFilesSignal responsed"<< std::endl;    
-    std::cout << summary.asByteArray().length() << std::endl;
+    std::cout << summary.asByteArray().length() << std::endl;    
 
     /*
     if (summary.isSet())
