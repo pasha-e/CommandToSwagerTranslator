@@ -140,7 +140,7 @@ void testGetFilesFunction()
     QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::files_getFilesSignal, [&](OpenAPI::OAIHttpFileElement summary)
         {
             OnGetFilesSignal(summary);
-            loop.quit();
+            //loop.quit();
         });
     /*
     QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::files_getFilesSignalFull, [&](OpenAPI::OAIHttpRequestWorker* worker, OpenAPI::OAIHttpFileElement summary)

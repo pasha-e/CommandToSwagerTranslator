@@ -15,6 +15,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
+#include <iostream>
+#include <conio.h>
+
 namespace OpenAPI {
 
 OAIFilesApi::OAIFilesApi(const int timeOut)
@@ -276,7 +279,22 @@ void OAIFilesApi::files_getFilesCallback(OAIHttpRequestWorker *worker) {
         msg = "Error: " + worker->error_str;
         error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
     }
-    OAIHttpFileElement output = worker->getHttpFileElement();
+
+    foreach (QString key, worker->getResponseHeaders().keys())
+    {
+        std::cout << key.toStdString() << "   " << worker->getResponseHeaders()[key].toStdString() << std::endl;
+    }
+
+    
+    std::cout << worker->getHttpResponseCode() << std::endl << worker->response.size() << std::endl;
+
+    std::cout << worker->getHttpFileElement().local_filename.toStdString() 
+        << std::endl << worker->getHttpFileElement().request_filename.toStdString() 
+        <<  std::endl << worker->getHttpFileElement().mime_type.toStdString()
+        << std::endl << worker->getHttpFileElement().variable_name.toStdString() << std::endl;
+      
+
+    OAIHttpFileElement output = worker->getHttpFileElement();    
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
