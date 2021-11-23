@@ -29,9 +29,9 @@ void OnGetListWorkspaceSignalError(QList<OAIWorkspace> summary, QNetworkReply::N
 void OnGetAuthTokenSignal(OpenAPI::OAIInline_response_200 summary);
 void OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str);
 
-void OnGetFilesSignal();
-void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker);
-void OnGetFilesSignalError(QNetworkReply::NetworkError error_type, QString error_str);
+void OnGetFilesSignal(OpenAPI::OAIHttpFileElement summar);
+void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker, OpenAPI::OAIHttpFileElement summary);
+void OnGetFilesSignalError(OpenAPI::OAIHttpFileElement summary, QNetworkReply::NetworkError error_type, QString error_str);
 
 void testGetAuthTokenFunction();
 void testGetWorkspaceListFunction();
@@ -136,22 +136,22 @@ void testGetFilesFunction()
     apiInstance.setBearerToken(_accessToken);
 
     QEventLoop loop;
-
-    /*QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::getFilesSignalFull, [&](OpenAPI::OAIHttpRequestWorker* worker)
+    
+    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::files_getFilesSignal, [&](OpenAPI::OAIHttpFileElement summary)
         {
-            OnGetFilesSignalFull(worker);
+            OnGetFilesSignal(summary);
             loop.quit();
         });
-    */
-    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::getFilesSignalFull, [&]()
+    /*
+    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::files_getFilesSignalFull, [&](OpenAPI::OAIHttpRequestWorker* worker, OpenAPI::OAIHttpFileElement summary)
         {
-            OnGetFilesSignal();
+            OnGetFilesSignalFull(worker, summary);
             loop.quit();
         });
-
-    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::getFilesSignalE, [&](QNetworkReply::NetworkError error_type, QString error_str)
+      */  
+    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::files_getFilesSignalE, [&](OpenAPI::OAIHttpFileElement summary, QNetworkReply::NetworkError error_type, QString error_str)
         {
-            OnGetFilesSignalError(error_type, error_str);
+            OnGetFilesSignalError(summary, error_type, error_str);
 
             loop.quit();
         });
@@ -160,7 +160,9 @@ void testGetFilesFunction()
     OpenAPI::OptionalParam<QString> nameParam;
     QString fileRef = filesRefList[0];
 
-    apiInstance.getFiles(fileRef);// , nameParam);
+    std::cout << "Request file: "<< fileRef.toStdString() << std::endl;
+
+    apiInstance.files_getFiles(fileRef, nameParam);
 
     QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();
@@ -184,7 +186,15 @@ void OnGetListWorkspaceSignal(QList<OAIWorkspace> summary)
         filesRefList.append(jsonResponse.value("fileRef").toString()) ;
 
         std::cout << value.asJson().toStdString() << std::endl;
+        
     }    
+
+    std::cout << "Files list:" << std::endl;
+    foreach(QString value, filesRefList)
+    {
+        std::cout << value.toStdString() << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 void  OnGetListWorkspaceSignalError(QList<OAIWorkspace> summary, QNetworkReply::NetworkError error_type, QString error_str)
@@ -216,17 +226,47 @@ void OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetwork
 }
 
 
-void OnGetFilesSignal()
+void OnGetFilesSignal(OpenAPI::OAIHttpFileElement summary)
 {
     std::cout << "getFilesSignal responsed"<< std::endl;    
+    std::cout << summary.asByteArray().length() << std::endl;
+
+    /*
+    if (summary.isSet())
+    {
+        std::cout << "set" << std::endl;
+    }
+    else
+    {
+        std::cout << "no set" << std::endl;
+    }
+    */
+    //std::cout << summary.asJsonValue().toString().toStdString() << std::endl;
+    
+    /*
+    QString path("FileDirectory/");
+    QDir dir; 
+    
+    if (!dir.exists(path))
+        dir.mkpath(path); 
+
+    QFile fileToSave(path + "file.bin");
+             
+    fileToSave.open( QIODevice::WriteOnly);
+
+    QByteArray byteArr = summary. ..asByteArray();
+    fileToSave.write(byteArr, qstrlen(byteArr));    
+    fileToSave.close();    */
 }
 
-void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker)
+void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker, OpenAPI::OAIHttpFileElement summary)
 {
     std::cout << "getFilesSignal responsed" << std::endl;
+    QString msg = QString("Success! %1 bytes").arg(worker->response.length());
+    std::cout << msg.toStdString() << std::endl;
 }
 
-void OnGetFilesSignalError(QNetworkReply::NetworkError error_type, QString error_str)
+void OnGetFilesSignalError(OpenAPI::OAIHttpFileElement summary, QNetworkReply::NetworkError error_type, QString error_str)
 {
     std::cout << "getFilesSignal responsed with error:  " << error_type << std::endl << error_str.toStdString() << std::endl;    
 }
