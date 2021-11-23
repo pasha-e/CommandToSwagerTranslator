@@ -7,6 +7,7 @@
 #include "client/OAIAuthApi.h"
 #include "client/OAIWorkspaceApi.h"
 #include "client/OAIWorkspace.h"
+#include "client/OAIFilesApi.h"
 #include <QtCore>
 
 #include <QTimer>
@@ -18,6 +19,8 @@ using  OpenAPI::OAIWorkspace;
 QString _accessToken;
 QString _refreshToken;
 
+QList<QString> filesRefList;
+
 void OnGetByGuidSignal(OpenAPI::OAIAssembly summary);
 
 void OnGetListWorkspaceSignal(QList<OAIWorkspace> summary);
@@ -26,9 +29,13 @@ void OnGetListWorkspaceSignalError(QList<OAIWorkspace> summary, QNetworkReply::N
 void OnGetAuthTokenSignal(OpenAPI::OAIInline_response_200 summary);
 void OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str);
 
+void OnGetFilesSignal();
+void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker);
+void OnGetFilesSignalError(QNetworkReply::NetworkError error_type, QString error_str);
 
 void testGetAuthTokenFunction();
 void testGetWorkspaceListFunction();
+void testGetFilesFunction();
 
 
 int main(int argc, char *argv[])
@@ -44,6 +51,8 @@ int main(int argc, char *argv[])
     std::cout << "testGetWorkspaceListFunction call" << std::endl;
     testGetWorkspaceListFunction();
     
+    std::cout << "testGetFilesFunction call" << std::endl;
+    testGetFilesFunction();
     
     
     return a.exec();
@@ -119,6 +128,44 @@ void testGetWorkspaceListFunction()
     loop.exec();    
 }
 
+void testGetFilesFunction()
+{
+    OpenAPI::OAIFilesApi    apiInstance;
+    apiInstance.setTimeOut(10000);    
+    apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setBearerToken(_accessToken);
+
+    QEventLoop loop;
+
+    /*QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::getFilesSignalFull, [&](OpenAPI::OAIHttpRequestWorker* worker)
+        {
+            OnGetFilesSignalFull(worker);
+            loop.quit();
+        });
+    */
+    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::getFilesSignalFull, [&]()
+        {
+            OnGetFilesSignal();
+            loop.quit();
+        });
+
+    QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::getFilesSignalE, [&](QNetworkReply::NetworkError error_type, QString error_str)
+        {
+            OnGetFilesSignalError(error_type, error_str);
+
+            loop.quit();
+        });
+
+    
+    OpenAPI::OptionalParam<QString> nameParam;
+    QString fileRef = filesRefList[0];
+
+    apiInstance.getFiles(fileRef);// , nameParam);
+
+    QTimer::singleShot(5000, &loop, &QEventLoop::quit);
+    loop.exec();
+}
+
 //-----------------------------------------------------------------------------------------------------------
 
 void OnGetByGuidSignal(OpenAPI::OAIAssembly summary)
@@ -126,13 +173,16 @@ void OnGetByGuidSignal(OpenAPI::OAIAssembly summary)
     std::cout << "getByGuidSignal responsed " << summary.asJson().toStdString() << std::endl;
 }
 
-
 void OnGetListWorkspaceSignal(QList<OAIWorkspace> summary)
 {
     std::cout << "GetListWorkspaceSignal responsed "<< std::endl;    
 
     foreach(OAIWorkspace value, summary)
     {
+        QJsonObject jsonResponse = value.asJsonObject();
+
+        filesRefList.append(jsonResponse.value("fileRef").toString()) ;
+
         std::cout << value.asJson().toStdString() << std::endl;
     }    
 }
@@ -163,4 +213,20 @@ void OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetwork
 {
     std::cout << "postOauthTokenErr responsed:  " << error_type << "  " << error_str.toStdString() << std::endl;
     std::cout << summary.asJson().toStdString() << std::endl;    
+}
+
+
+void OnGetFilesSignal()
+{
+    std::cout << "getFilesSignal responsed"<< std::endl;    
+}
+
+void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker)
+{
+    std::cout << "getFilesSignal responsed" << std::endl;
+}
+
+void OnGetFilesSignalError(QNetworkReply::NetworkError error_type, QString error_str)
+{
+    std::cout << "getFilesSignal responsed with error:  " << error_type << std::endl << error_str.toStdString() << std::endl;    
 }
