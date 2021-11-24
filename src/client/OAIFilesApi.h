@@ -60,10 +60,10 @@ public:
 
     /**
     * @param[in]  file_ref QString [required]
-    * @param[in]  attachment QString [required]
+    * @param[in]  attachment bool [required]
     * @param[in]  name QString [optional]
     */
-    void files_getFiles(const QString &file_ref, const QString &attachment, const ::OpenAPI::OptionalParam<QString> &name = ::OpenAPI::OptionalParam<QString>());
+    void files_getFiles(const QString &file_ref, const bool &attachment, const ::OpenAPI::OptionalParam<QString> &name = ::OpenAPI::OptionalParam<QString>());
 
     /**
     * @param[in]  content_type QString [required]

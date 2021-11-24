@@ -178,7 +178,7 @@ void testGetFilesFunction(QString fileRef)
 
        
     OpenAPI::OptionalParam<QString> nameParam;
-    QString attachmentTypeParam("true");
+    bool attachmentTypeParam(true);
     
     std::cout << "Request file: "<< fileRef.toStdString() << std::endl;
 

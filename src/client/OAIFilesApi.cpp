@@ -209,7 +209,7 @@ QString OAIFilesApi::getParamStyleDelimiter(QString style, QString name, bool is
     }
 }
 
-void OAIFilesApi::files_getFiles(const QString &file_ref, const QString &attachment, const ::OpenAPI::OptionalParam<QString> &name) {
+void OAIFilesApi::files_getFiles(const QString &file_ref, const bool &attachment, const ::OpenAPI::OptionalParam<QString> &name) {
     QString fullPath = QString(_serverConfigs["files_getFiles"][_serverIndices.value("files_getFiles")].URL()+"/files");
     
     if(!_bearerToken.isEmpty())
