@@ -18,8 +18,6 @@
 #include <QUrl>
 #include <QUuid>
 #include <QtGlobal>
-#include <iostream>
-#include <conio.h>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     #define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
 #else
@@ -448,14 +446,12 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
             contentEncodingHdr = getResponseHeaders().value(hdr);
         }
     }
-    
+
     if (!contentDispositionHdr.isEmpty()) {
         auto contentDisposition = contentDispositionHdr.split(QString(";"), SKIP_EMPTY_PARTS);
         auto contentType =
             !contentTypeHdr.isEmpty() ? contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS).first() : QString();
-
-        
-        if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("attachment"))) { 
+        if ((contentDisposition.count() > 0) && (contentDisposition.first() == QString("attachment"))) {
             QString filename = QUuid::createUuid().toString();
             for (const auto &file : contentDisposition) {
                 if (file.contains(QString("filename"))) {
@@ -464,18 +460,12 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
                 }
             }
             OAIHttpFileElement felement;
-
-            //QString dir = workingDirectory + QDir::separator();
-            //std::cout << dir.toStdString() << std::endl;
-            
-
-            felement.saveToFile(QString(), workingDirectory + QDir::separator() + filename, filename, contentType, reply->readAll());            
+            felement.saveToFile(QString(), workingDirectory + QDir::separator() + filename, filename, contentType, reply->readAll());
             files.insert(filename, felement);
         }
 
     } else if (!contentTypeHdr.isEmpty()) {
-        auto contentType = contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS);       
-
+        auto contentType = contentTypeHdr.split(QString(";"), SKIP_EMPTY_PARTS);
         if ((contentType.count() > 0) && (contentType.first() == QString("multipart/form-data"))) {
             // TODO : Handle Multipart responses
         } else {

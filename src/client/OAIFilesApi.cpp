@@ -15,9 +15,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include <iostream>
-#include <conio.h>
-
 namespace OpenAPI {
 
 OAIFilesApi::OAIFilesApi(const int timeOut)
@@ -212,7 +209,7 @@ QString OAIFilesApi::getParamStyleDelimiter(QString style, QString name, bool is
     }
 }
 
-void OAIFilesApi::files_getFiles(const QString &file_ref, const ::OpenAPI::OptionalParam<QString> &name) {
+void OAIFilesApi::files_getFiles(const QString &file_ref, const QString &attachment, const ::OpenAPI::OptionalParam<QString> &name) {
     QString fullPath = QString(_serverConfigs["files_getFiles"][_serverIndices.value("files_getFiles")].URL()+"/files");
     
     if(!_bearerToken.isEmpty())
@@ -249,6 +246,21 @@ void OAIFilesApi::files_getFiles(const QString &file_ref, const ::OpenAPI::Optio
 
         fullPath.append(QUrl::toPercentEncoding("name")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(name.value())));
     }
+    
+    {
+        queryStyle = "form";
+        if(queryStyle == "")
+            queryStyle = "form";
+        queryPrefix = getParamStylePrefix(queryStyle);
+        querySuffix = getParamStyleSuffix(queryStyle);
+        queryDelimiter = getParamStyleDelimiter(queryStyle, "attachment", true);
+        if (fullPath.indexOf("?") > 0)
+            fullPath.append(queryPrefix);
+        else
+            fullPath.append("?");
+
+        fullPath.append(QUrl::toPercentEncoding("attachment")).append(querySuffix).append(QUrl::toPercentEncoding(::OpenAPI::toStringValue(attachment)));
+    }
     OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this, _manager);
     worker->setTimeOut(_timeOut);
     worker->setWorkingDirectory(_workingDirectory);
@@ -279,23 +291,7 @@ void OAIFilesApi::files_getFilesCallback(OAIHttpRequestWorker *worker) {
         msg = "Error: " + worker->error_str;
         error_str = QString("%1, %2").arg(worker->error_str).arg(QString(worker->response));
     }
-    /*
-    foreach (QString key, worker->getResponseHeaders().keys())
-    {
-        std::cout << key.toStdString() << "   " << worker->getResponseHeaders()[key].toStdString() << std::endl;
-    }
-
-    
-    std::cout << worker->getHttpResponseCode() << std::endl << worker->response.size() << std::endl;
-
-    std::cout << worker->getHttpFileElement().local_filename.toStdString() 
-        << std::endl << worker->getHttpFileElement().request_filename.toStdString() 
-        <<  std::endl << worker->getHttpFileElement().mime_type.toStdString()
-        << std::endl << worker->getHttpFileElement().variable_name.toStdString() << std::endl;
-    */
-   
-
-    OAIHttpFileElement output = worker->getHttpFileElement();    
+    OAIHttpFileElement output = worker->getHttpFileElement();
     worker->deleteLater();
 
     if (worker->error_type == QNetworkReply::NoError) {
