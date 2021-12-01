@@ -1,8 +1,6 @@
 #include <QCoreApplication>
 #include <iostream>
 #include <conio.h>
-//#include <../tcp_server/tcp_server.h>
-//#include <../client/OAIAssemblyApi.h>
 #include "client/OAIAssemblyApi.h"
 #include "client/OAIAuthApi.h"
 #include "client/OAIWorkspaceApi.h"
@@ -18,6 +16,14 @@ using  OpenAPI::OAIWorkspace;
 
 QString _accessToken;
 QString _refreshToken;
+const QString _contentTypeParams("application/x-www-form-urlencoded");
+const QString _authParams("Basic Y2xpZW50OnNlY3JldA==");
+const QString _grantTypeParams("password");
+
+//const QString _kcsUrl("http://kcs.seabis.ru:8080");
+const QString _kcsUrl("https://kcs.seabis.ru");
+QString _usernameParams("rest_user"); //имя пользователя
+QString _passwordParams("rest_user"); //пароль пользователя
 
 QList<QString> _filesRefList;
 
@@ -81,7 +87,7 @@ void testGetAuthTokenFunction()
     OpenAPI::OAIAuthApi apiInstance;
     
     apiInstance.setTimeOut(10000);
-    apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setNewServerForAllOperations(QUrl(_kcsUrl), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 
     QEventLoop loop;
    
@@ -97,14 +103,7 @@ void testGetAuthTokenFunction()
             loop.quit();
     });
 
-    
-    const QString contentTypeParams("application/x-www-form-urlencoded");
-    const QString authParams("Basic Y2xpZW50OnNlY3JldA==");
-    const QString grantTypeParams("password");
-    QString usernameParams("rest_user");
-    QString passwordParams("rest_user");
-
-    apiInstance.oauth_postOauthToken(contentTypeParams, authParams, grantTypeParams, usernameParams, passwordParams);
+    apiInstance.oauth_postOauthToken(_contentTypeParams, _authParams, _grantTypeParams, _usernameParams, _passwordParams);
 
     QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();        
@@ -115,8 +114,7 @@ void testGetWorkspaceListFunction()
     OpenAPI::OAIWorkspaceApi apiInstance;
 
     apiInstance.setTimeOut(10000);
-    // apiInstance.setNewServerForAllOperations(QUrl("https://kcs.seabis.ru/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
-    apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setNewServerForAllOperations(QUrl(_kcsUrl+"/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
     apiInstance.setBearerToken(_accessToken);
  
     QEventLoop loop;
@@ -139,7 +137,7 @@ void testGetWorkspaceListFunction()
   
     OpenAPI::OptionalParam<QString> emptyParam;
 		
-    apiInstance.workspace_getListWorkspace("projectId", emptyParam, emptyParam, emptyParam, emptyParam);
+    apiInstance.workspace_getListWorkspace("projectId");
 
 	QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();    
@@ -149,8 +147,7 @@ void testGetFilesFunction(QString fileRef)
 {
     OpenAPI::OAIFilesApi    apiInstance;
     apiInstance.setTimeOut(10000);    
-  // apiInstance.setNewServerForAllOperations(QUrl("http://kcs.seabis.ru:8080/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
-    apiInstance.setNewServerForAllOperations(QUrl("https://kcs.seabis.ru/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
+    apiInstance.setNewServerForAllOperations(QUrl(_kcsUrl + "/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
     apiInstance.setBearerToken(_accessToken);
     
     apiInstance.setWorkingDirectory(_fileCacheDir);
