@@ -27,16 +27,16 @@ add_executable(CommandToSwagerTranslator ${SRC})
 
 
 add_subdirectory(src/client)
-add_subdirectory(src/tcp_server)
+#add_subdirectory(src/tcp_server)
 
-target_link_libraries(${TARGET_NAME} 
-        tcp_server 
-        client 
-        Qt5::Core 
-        Qt5::Network
-        OpenSSL::SSL
-        OpenSSL::Crypto
-        )
+#target_link_libraries(${TARGET_NAME} 
+#        tcp_server 
+#        client 
+#        Qt5::Core 
+#        Qt5::Network
+#        OpenSSL::SSL
+#        OpenSSL::Crypto
+#        )
         
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)

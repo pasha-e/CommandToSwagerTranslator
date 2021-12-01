@@ -9,16 +9,16 @@ CONFIG -= app_bundle
 
 SOURCES += \
         main.cpp \
-        tcp_server/tcp_server.cpp
+        #tcp_server/tcp_server.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    tcp_server/decl.h \
-    tcp_server/tcp_server.h
+#HEADERS += \
+#    tcp_server/decl.h \
+#    tcp_server/tcp_server.h
 
-DISTFILES += \
-    tcp_server/CMakeLists.txt
+#DISTFILES += \
+#    tcp_server/CMakeLists.txt

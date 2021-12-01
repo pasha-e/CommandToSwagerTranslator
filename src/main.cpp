@@ -137,7 +137,7 @@ void testGetWorkspaceListFunction()
   
     OpenAPI::OptionalParam<QString> emptyParam;
 		
-    apiInstance.workspace_getListWorkspace("projectId");
+    apiInstance.workspace_getListWorkspace("projectId");    
 
 	QTimer::singleShot(5000, &loop, &QEventLoop::quit);
     loop.exec();    
@@ -257,7 +257,7 @@ void OnGetFilesSignal(OpenAPI::OAIHttpFileElement summary)
 
     bool result = false;
 
-    QFile fileToSave(path + summary.request_filename);
+    QFile fileToSave(path + summary.request_filename.remove('\"'));
              
     result = fileToSave.open( QIODevice::WriteOnly);
 

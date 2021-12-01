@@ -456,6 +456,7 @@ void OAIHttpRequestWorker::process_response(QNetworkReply *reply) {
             for (const auto &file : contentDisposition) {
                 if (file.contains(QString("filename"))) {
                     filename = file.split(QString("="), SKIP_EMPTY_PARTS).at(1);
+                    filename = filename.remove('\"');
                     break;
                 }
             }
