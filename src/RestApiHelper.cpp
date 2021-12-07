@@ -46,9 +46,11 @@ namespace OpenApiHelper
 			dir.mkpath(_fileCacheDir);
 	}
 
-	void RestApiHelper::GetAuthToken()
+	bool RestApiHelper::GetAuthToken(std::string &accessToken)
 	{
 		OpenAPI::OAIAuthApi apiInstance;
+
+		bool result = false;
 
 		apiInstance.setTimeOut(10000);
 		apiInstance.setNewServerForAllOperations(QUrl(_kcsUrl), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
@@ -58,6 +60,11 @@ namespace OpenApiHelper
 		QObject::connect(&apiInstance, &OpenAPI::OAIAuthApi::oauth_postOauthTokenSignal, [&](OpenAPI::OAIInline_response_200 summary)
 			{
 				OnGetAuthTokenSignal(summary);
+
+				accessToken = _accessToken.toStdString();
+
+				result = true;
+
 				loop.quit();
 			});
 
@@ -71,15 +78,19 @@ namespace OpenApiHelper
 
 		QTimer::singleShot(5000, &loop, &QEventLoop::quit);
 		loop.exec();
+
+		return result;
 	}
 
-	void RestApiHelper::GetWorkspaceList()
+	bool RestApiHelper::GetWorkspaceList(std::string accessToken , std::vector<std::string> &filesList)
 	{
 		OpenAPI::OAIWorkspaceApi apiInstance;
 
+		bool result = false;
+
 		apiInstance.setTimeOut(10000);
 		apiInstance.setNewServerForAllOperations(QUrl(_kcsUrl + "/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
-		apiInstance.setBearerToken(_accessToken);
+		apiInstance.setBearerToken(QString::fromStdString(accessToken));
 
 		QEventLoop loop;
 
@@ -87,7 +98,12 @@ namespace OpenApiHelper
 		QObject::connect(&apiInstance, &OpenAPI::OAIWorkspaceApi::workspace_getListWorkspaceSignal, [&](QList<OpenAPI::OAIWorkspace> summary)
 			{
 				OnGetListWorkspaceSignal(summary);
-				loop.quit();
+
+				filesList = GetFilesList();
+
+				result = true;
+
+				loop.quit();				
 			});
 
 		QObject::connect(&apiInstance, &OpenAPI::OAIWorkspaceApi::workspace_getListWorkspaceSignalE, [&](QList<OpenAPI::OAIWorkspace> summary, QNetworkReply::NetworkError error_type, QString error_str)
@@ -105,11 +121,16 @@ namespace OpenApiHelper
 
 		QTimer::singleShot(5000, &loop, &QEventLoop::quit);
 		loop.exec();
+
+		return result;
 	}
 
-	void RestApiHelper::GetFile(std::string fileRef)
+	bool RestApiHelper::GetFile(std::string fileRef, OpenAPI::OAIHttpFileElement &summaryOut)
 	{
 		OpenAPI::OAIFilesApi    apiInstance;
+
+		bool result = false;
+
 		apiInstance.setTimeOut(10000);
 		apiInstance.setNewServerForAllOperations(QUrl(_kcsUrl + "/api/v1/rest"), "No description provided", QMap<QString, OpenAPI::OAIServerVariable>());
 		apiInstance.setBearerToken(_accessToken);
@@ -121,6 +142,11 @@ namespace OpenApiHelper
 		QObject::connect(&apiInstance, &OpenAPI::OAIFilesApi::files_getFilesSignal, [&](OpenAPI::OAIHttpFileElement summary)
 			{
 				OnGetFilesSignal(summary);
+
+				summaryOut = summary;
+
+				result = true;
+
 				loop.quit();
 			});
 		/*
@@ -141,12 +167,12 @@ namespace OpenApiHelper
 		OpenAPI::OptionalParam<QString> nameParam;
 		bool attachmentTypeParam(true);
 
-		std::cout << "Request file: " << fileRef << std::endl;
-
 		apiInstance.files_getFiles(QString::fromStdString(fileRef), attachmentTypeParam, nameParam);
 
 		QTimer::singleShot(5000, &loop, &QEventLoop::quit);
 		loop.exec();
+
+		return result;
 	}
 
 	QList<QString> RestApiHelper::CurrentFilesList()
@@ -154,15 +180,30 @@ namespace OpenApiHelper
 		return _filesRefList;
 	}
 
+	std::vector<std::string> RestApiHelper::GetFilesList()
+	{
+		std::vector<std::string>  filesRefList;
+
+		foreach(QString value, _filesRefList)
+		{
+			filesRefList.push_back(value.toStdString());
+		}
+
+		return filesRefList;
+
+	}
+
+	
 	void RestApiHelper::OnGetAuthTokenSignal(OpenAPI::OAIInline_response_200 summary)
 	{
 		QJsonObject jsonResponse = summary.asJsonObject();
 		_accessToken = jsonResponse.value("access_token").toString();
 		_refreshToken = jsonResponse.value("refresh_token").toString();
-		std::cout << "postOauthToken responsed:  " << std::endl;
+		
+		/*std::cout << "postOauthToken responsed:  " << std::endl;
 		std::cout << "access_token: " << _accessToken.toStdString() << std::endl;
 		std::cout << "refresh_token: " << _refreshToken.toStdString() << std::endl;
-		std::cout << summary.asJson().toStdString() << std::endl;
+		std::cout << summary.asJson().toStdString() << std::endl;*/
 	}
 
 	void RestApiHelper::OnGetAuthTokenSignalError(OpenAPI::OAIInline_response_200 summary, QNetworkReply::NetworkError error_type, QString error_str)
@@ -175,24 +216,25 @@ namespace OpenApiHelper
 
 	void RestApiHelper::OnGetListWorkspaceSignal(QList<OpenAPI::OAIWorkspace> summary)
 	{
-		std::cout << "GetListWorkspaceSignal responsed " << std::endl;
-
+		//std::cout << "GetListWorkspaceSignal responsed " << std::endl;
+		
 		foreach(OpenAPI::OAIWorkspace value, summary)
 		{
 			QJsonObject jsonResponse = value.asJsonObject();
 
 			_filesRefList.append(jsonResponse.value("fileRef").toString());
 
-			std::cout << value.asJson().toStdString() << std::endl;
+			//std::cout << value.asJson().toStdString() << std::endl;
 
 		}
 
+		/*
 		std::cout << "Files list:" << std::endl;
 		foreach(QString value, _filesRefList)
 		{
 			std::cout << value.toStdString() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << std::endl;*/
 	}
 
 	void  RestApiHelper::OnGetListWorkspaceSignalError(QList<OpenAPI::OAIWorkspace> summary, QNetworkReply::NetworkError error_type, QString error_str)
@@ -208,9 +250,10 @@ namespace OpenApiHelper
 
 	void RestApiHelper::OnGetFilesSignal(OpenAPI::OAIHttpFileElement summary)
 	{
-		std::cout << "getFilesSignal responsed" << std::endl;
-		std::cout << "File lenght: " << summary.asByteArray().length() << std::endl;
-		std::cout << "File name: " << summary.request_filename.toStdString() << std::endl;
+		//std::cout << "getFilesSignal responsed" << std::endl;
+		
+		//std::cout << "File lenght: " << summary.asByteArray().length() << std::endl;
+		//std::cout << "File name: " << summary.request_filename.toStdString() << std::endl;		
 
 		QString path("FileDownloadDirectory/");
 		QDir dir;
@@ -233,7 +276,7 @@ namespace OpenApiHelper
 		}
 		else
 		{
-			std::cout << "File " << summary.request_filename.toStdString() << "successfully created at " << path.toStdString() << std::endl << std::endl;
+			std::cout << "File " << summary.request_filename.toStdString() << " successfully created at " << path.toStdString() << std::endl << std::endl;
 		}
 	}
 

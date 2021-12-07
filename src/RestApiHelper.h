@@ -14,13 +14,13 @@ namespace OpenApiHelper
 		RestApiHelper();
 		~RestApiHelper();
 
-		QList<QString> CurrentFilesList();
+		std::vector<std::string> RestApiHelper::GetFilesList();
 
-		void GetAuthToken();
+		bool GetAuthToken(std::string &accessToken);
 
-		void GetWorkspaceList();
+		bool GetWorkspaceList(std::string accessToken, std::vector<std::string> &filesList);
 
-		void GetFile(std::string fileRef);
+		bool GetFile(std::string fileRef, OpenAPI::OAIHttpFileElement &summary);
 
 	private:
 
@@ -54,5 +54,7 @@ namespace OpenApiHelper
 		void OnGetFilesSignal(OpenAPI::OAIHttpFileElement summary);
 		void OnGetFilesSignalFull(OpenAPI::OAIHttpRequestWorker* worker, OpenAPI::OAIHttpFileElement summary);
 		void OnGetFilesSignalError(OpenAPI::OAIHttpFileElement summary, QNetworkReply::NetworkError error_type, QString error_str);
+
+		QList<QString> CurrentFilesList();
 	};
 }
