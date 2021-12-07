@@ -1,8 +1,5 @@
-#include <QCoreApplication>
 #include <iostream>
 #include <conio.h>
-
-#include <QtCore>
 
 #include "RestApiHelper.h"
 
