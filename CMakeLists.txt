@@ -23,7 +23,7 @@ file(GLOB_RECURSE SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 include_directories(${SRC})
-add_executable(CommandToSwagerTranslator ${SRC})
+add_executable(CommandToSwagerTranslator ${SRC} "src/RestApiHelper.h")
 
 
 add_subdirectory(src/client)
